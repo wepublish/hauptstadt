@@ -7,6 +7,10 @@ on:
         required: true
         type: string
 
+    secrets:
+      NPMRC:
+        required: true
+
 jobs:
   build-and-push-website:
     name: Build and push website
@@ -22,6 +26,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v2
         with:
+          secrets: |
+            "npmrc=${{ secrets.NPMRC }}"
           push: true
           tags: |
             ${{ inputs.tags }}
