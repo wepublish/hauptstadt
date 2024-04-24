@@ -100,8 +100,8 @@ export default {
     '~/assets/styles/layout.scss',
     '~/assets/styles/print.scss',
     '~/assets/styles/style.scss',
-    '~/assets/styles/typography.scss'
-    // './node_modules/@fortawesome/fontawesome-pro/css/all.css'
+    '~/assets/styles/typography.scss',
+    './node_modules/@fortawesome/fontawesome-pro/css/all.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
