@@ -182,6 +182,8 @@ export default Vue.extend({
       if (!this.memberPlans.memberPlans.length) {
         return []
       }
+      // sort member-plans
+      this.memberPlans.sortBySortOrder()
       // show specific member-plan
       if (this.memberPlanBySlug) {
         return this.memberPlans.memberPlans.filter((memberPlan) => {
@@ -192,7 +194,6 @@ export default Vue.extend({
       if (!this.currentMemberPlanType) {
         return this.memberPlans.memberPlans
       }
-      this.memberPlans.sortBySortOrder()
       // member-plans filtered by type
       return this.memberPlans.memberPlans.filter((memberPlan) => {
         return memberPlan.slug.toLowerCase().includes(this.currentMemberPlanType as string)

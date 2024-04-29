@@ -375,6 +375,14 @@ export default Vue.extend({
     memberPlan () {
       if (!this.memberPlan) { return }
       this.memberRegistration.monthlyAmount = this.memberPlan.amountPerMonthMin
+    },
+    // select first available payment provider
+    availablePaymentMethods: {
+      handler: function (newAvailablePaymentMethods) {
+        this.selectedPaymentProvider = newAvailablePaymentMethods[0]?.getPaymentMethods()?.getFirstPaymentMethod()?.slug
+      },
+      deep: true,
+      immediate: true
     }
   },
   mounted () {
@@ -385,8 +393,7 @@ export default Vue.extend({
       // loading redirect url
       this.SUCCESS_URL = this.$config.PAYMENT_SUCCESS_URL
       this.FAILURE_URL = this.$config.PAYMENT_FAILURE_URL
-      // select first payment provider (Stripe or Payrexx)
-      this.selectedPaymentProvider = this.availablePaymentMethods[0]?.getPaymentMethods()?.getFirstPaymentMethod()?.slug
+      
       // pre-select auto-renew
       this.memberRegistration.autoRenew = true
       if (!this.memberPlan) { return }

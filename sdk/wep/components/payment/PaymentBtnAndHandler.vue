@@ -50,7 +50,7 @@
     <!-- extend subscription dialog -->
     <v-dialog
       v-model="extendDialog"
-      max-width="500px"
+      max-width="600px"
     >
       <v-card>
         <v-card-title>
@@ -74,6 +74,74 @@
             @click="pay()"
           >
             Jetzt verlängern
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+    <!-- payrexx migration dialog -->
+    <v-dialog
+      v-model="payrexxMigrationDialog"
+      max-width="550px"
+    >
+      <v-card>
+        <v-card-title>
+          Künftig noch einfacher: Automatische Bezahlung
+        </v-card-title>
+        <v-card-text>
+          <p>
+            Jedes Mal, wenn Dein Hauptstadt-Abo erneuert wird oder Du ein neues lösen willst, musstest Du Deine Zahlungsdaten eingeben.
+            Genau wie jetzt. Das haben wir für die Zukunft vereinfacht. Wenn du einverstanden bist,
+            werden wir bei der nächsten Verlängerung oder beim Kauf des nächsten Abos die Zahlung automatisch belasten. Das spart dir Zeit und verschafft uns etwas mehr Sicherheit.
+          </p>
+          <p>
+            Wenn Du damit nicht einverstanden bist, senden wir Dir künftig eine Rechnung per E-Mail, die Du hernach begleichen kannst.
+          </p>
+        </v-card-text>
+        <v-card-actions
+          class="justify-space-around"
+        >
+          <v-btn
+            outlined
+            @click="openSwitchDialog()"
+          >
+            Nein, auf Rechnung wechseln
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="pay()"
+          >
+            <span class="fal fa-check mr-1"/>
+            Einverstanden
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    
+    <!-- really want to change to invoice -->
+    <v-dialog
+      v-model="switchToInvoiceDialog"
+      max-width="550px"
+    >
+      <v-card>
+        <v-card-title>
+          Bist Du sicher?
+        </v-card-title>
+        <v-card-text>
+          Dein aktuelles Abo wird gekündet und ein neues wird auf Rechnung erstellt.
+        </v-card-text>
+        <v-card-actions class="justify-space-around">
+          <v-btn
+            outlined
+            @click="switchSubscription()"
+          >
+            Ja, Abo wechseln
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="pay()"
+          >
+            Doch lieber online bezahlen
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -133,6 +201,8 @@ import PaymentResponse from '~/sdk/wep/models/response/PaymentResponse'
 import User from '~/sdk/wep/models/user/User'
 import Invoices from '~/sdk/wep/models/invoice/Invoices'
 import SubscriptionService from '~/sdk/wep/services/SubscriptionService'
+import MemberService from '~/sdk/wep/services/MemberService'
+import MemberRegistration from '~/sdk/wep/models/member/MemberRegistration'
 
 export default Vue.extend({
   name: 'PaymentBtnAndHandler',
@@ -168,7 +238,9 @@ export default Vue.extend({
       intentSecret: undefined as undefined | string,
       preparingPayment: false as boolean,
       paymentDialog: false as boolean,
-      extendDialog: false as boolean
+      extendDialog: false as boolean,
+      payrexxMigrationDialog: false as boolean,
+      switchToInvoiceDialog: false as boolean
     }
   },
   computed: {
@@ -215,11 +287,17 @@ export default Vue.extend({
     closeDialogs (): void {
       this.extendDialog = false
       this.paymentDialog = false
+      this.payrexxMigrationDialog = false
+      this.switchToInvoiceDialog = false
     },
 
     // Init invoice payment
     initPay (): void {
       if (this.mode === 'payOpenInvoice') {
+        if (this.openPayrexxDialoge()) {
+          this.payrexxMigrationDialog = true
+          return
+        }
         // directly go to payment
         this.pay()
       } else if (this.mode === 'extendSubscription') {
@@ -262,6 +340,23 @@ export default Vue.extend({
       await this.handlingAfterPayment(response)
       this.preparingPayment = false
     },
+    
+    openPayrexxDialoge (): boolean {
+      // auto deactivate function after April 2025
+      const stopFunction = new Date(2025, 4, 1)
+      const now = new Date()
+      if (now.getTime() >= stopFunction.getTime()) {
+        return false
+      }
+      const paymentMethodSlug = this.subscription.getPaymentMethod()?.getSlug()
+      return paymentMethodSlug === 'payrexx'
+    },
+    
+    openSwitchDialog (): void {
+      this.closeDialogs()
+      this.switchToInvoiceDialog = true
+    },
+    
     checksBeforePayment (): false | {paymentMethodID: string, successURL: string, failureURL: string} {
       // do not extend subscription if it has unpaid invoices
       if (this.mode === 'extendSubscription' && this.subscriptionHasOpenInvoice) {
@@ -364,6 +459,59 @@ export default Vue.extend({
           this.paymentDialog = true
         })
       }
+    },
+
+    // deprecated from 01.05.2024 on
+    async switchSubscription () {
+      this.preparingPayment = true
+      this.closeDialogs()
+      // 1. do some checks
+      const checkResult = this.checksBeforePayment()
+      if (!checkResult) {
+        this.preparingPayment = false
+        return
+      }
+      
+      // 2. get bexio payment adapter id
+      const bexioPaymentId = this.subscription.memberPlan
+        ?.getAvailablePaymentMethods()
+        ?.getAvailablePaymentMethodBySlug('bexio')
+        ?.getPaymentMethods()
+        ?.getFirstPaymentMethod()
+        ?.id
+      if (!bexioPaymentId) {
+        this.$nuxt.$emit('alert', {
+          title: `Der benötigte Bexio-Payment-Adapter konnte nicht gefunden werden.`,
+          type: 'error'
+        })
+        this.preparingPayment = false
+        return
+      }
+      
+      // 3. create new subscription
+      const memberRegistration = {
+        autoRenew: this.subscription.autoRenew,
+        monthlyAmount: this.subscription.monthlyAmount,
+        memberPlanId: this.subscription.memberPlan?.id,
+        paymentPeriodicity: this.subscription.paymentPeriodicity,
+        paymentMethodId: bexioPaymentId,
+        successURL: this.$config.PAYMENT_SUCCESS_URL,
+        failureURL: this.$config.PAYMENT_FAILURE_URL
+      } as MemberRegistration
+      const memberService = new MemberService({vue: this})
+      const paymentResponse = await memberService.createSubscription({memberRegistration})
+      
+      if (!paymentResponse) {
+        this.preparingPayment = false
+        return false
+      }
+      
+      // 4. cancel current subscription
+      const subscriptionService = new SubscriptionService({vue: this})
+      await subscriptionService.cancelUserSubscription({subscriptionId: this.subscription.id})
+      
+      // 5. reload user subscriptions
+      await this.refreshUserData()
     },
 
     async refreshUserData () {
