@@ -205,10 +205,14 @@ export default Vue.extend({
     memberPlansToShow (): MemberPlan[] {
       const myMemberPlans = (this.$store.getters['auth/me']?.subscriptions as Subscriptions)?.subscriptions.map(subscription => subscription.memberPlan) || []
       return this.memberPlansByType.filter(memberPlan => {
-        if (!memberPlan.maxCount) return true
+        if (!memberPlan.maxCount) {
+          return true
+        }
         const hasMemberPlanWithMaxCount = myMemberPlans.find(myMemberPlan => myMemberPlan?.id === memberPlan.id)
-        if (!hasMemberPlanWithMaxCount) return true
-        return hasMemberPlanWithMaxCount.maxCount < memberPlan.maxCount
+        if (!hasMemberPlanWithMaxCount) {
+          return true
+        }
+        return (hasMemberPlanWithMaxCount?.maxCount || 0) < memberPlan.maxCount
       })
     },
     selectedMemberPlan (): undefined | MemberPlan {
