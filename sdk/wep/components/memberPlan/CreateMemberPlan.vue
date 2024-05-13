@@ -34,7 +34,7 @@
               v-for="(memberPlan, memberPlanId) in memberPlansByType"
               :key="memberPlan.id"
               class="col-12 col-sm-6 col-md-4 py-2"
-              :class="{'grey--text': memberPlan.name.startsWith('(Ich kann')}"
+              :class="{'grey--text': hasDisabledStyleTag(memberPlan)}"
             >
               <v-row class="no-gutters">
                 <!-- button -->
@@ -74,7 +74,7 @@
                   <!-- description -->
                   <p
                     :class="[hasDisabledStyleTag(memberPlan) ? 'font-size-12' : '']"
-                    v-html="memberPlan.getHtmlOfDescription({})"
+                    v-html="memberPlan.getHtmlOfDescription({fontClassHeadings: ''})"
                   />
                 </v-col>
               </v-row>
