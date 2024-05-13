@@ -19,6 +19,7 @@ export interface MemberRegistrationProps {
   failureURL?: string
   challengeAnswer?: ChallengeAnswer
   password?: string
+  deactivateSubscriptionId?: string
 }
 
 /**
@@ -34,6 +35,7 @@ export default class MemberRegistration extends Member {
   public failureURL?: string
   public challengeAnswer?: ChallengeAnswer
   public password?: string
+  public deactivateSubscriptionId?: string
 
   constructor({
     id,
@@ -50,7 +52,8 @@ export default class MemberRegistration extends Member {
     successURL,
     failureURL,
     challengeAnswer,
-    password
+    password,
+    deactivateSubscriptionId
   }: MemberRegistrationProps) {
     super({id, name, firstName, preferredName, address, email})
     this.memberPlanId = memberPlanId
@@ -62,6 +65,7 @@ export default class MemberRegistration extends Member {
     this.failureURL = failureURL
     this.challengeAnswer = challengeAnswer ? new ChallengeAnswer(challengeAnswer) : undefined
     this.password = password
+    this.deactivateSubscriptionId = deactivateSubscriptionId
   }
 
   getUser() {

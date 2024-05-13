@@ -504,7 +504,8 @@ export default Vue.extend({
         paymentPeriodicity: this.subscription.paymentPeriodicity,
         paymentMethodId: bexioPaymentId,
         successURL: this.$config.PAYMENT_SUCCESS_URL,
-        failureURL: this.$config.PAYMENT_FAILURE_URL
+        failureURL: this.$config.PAYMENT_FAILURE_URL,
+        deactivateSubscriptionId: this.subscription.id
       } as MemberRegistration
       const memberService = new MemberService({vue: this})
       const paymentResponse = await memberService.createSubscription({memberRegistration})
@@ -514,11 +515,7 @@ export default Vue.extend({
         return false
       }
       
-      // 4. cancel current subscription
-      const subscriptionService = new SubscriptionService({vue: this})
-      await subscriptionService.cancelUserSubscription({subscriptionId: this.subscription.id})
-      
-      // 5. reload user subscriptions
+      // 4. reload user subscriptions
       await this.refreshUserData()
     },
 
