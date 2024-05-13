@@ -126,6 +126,15 @@
                   label="Mit automatischer Abo-Erneuerung"
                 />
               </v-col>
+              <!-- force auto renew hint -->
+              <v-col
+                v-if="selectedPaymentMethod && selectedPaymentMethod.forceAutoRenewal"
+                class="v-col"
+              >
+                <p class="mb-0">
+                  Automatische Abo-Erneuerung. Du erhältst von uns jährlich eine Erinnerungsmail und kannst jederzeit kündigen.
+                </p>
+              </v-col>
             </v-row>
           </v-col>
 
@@ -227,6 +236,7 @@
     <!-- active subscriptions -->
     <active-subscription-dialog
       v-model="subscriptionsDialog"
+      :active-subscription="activeSubscription"
       @checkout="checkout(false, false)"
     />
 
@@ -264,6 +274,7 @@ import ChallengeAnswer from '~/sdk/wep/models/challenge/ChallengeAnswer'
 import ActiveSubscriptionDialog from '~/sdk/wep/components/payment/ActiveSubscriptionDialog.vue'
 import RedirectDialog from '~/sdk/wep/components/payment/RedirectDialog.vue'
 import OpenInvoiceDialog from '~/sdk/wep/components/payment/OpenInvoiceDialog.vue'
+import Subscription from '~/sdk/wep/models/subscription/Subscription'
 
 export default Vue.extend({
   name: 'PaymentForm',
@@ -364,11 +375,14 @@ export default Vue.extend({
     subscriptions (): undefined | Subscriptions {
       return this.user?.subscriptions
     },
-    activeSubscriptions (): undefined | boolean {
+    trialSubscription (): undefined | Subscription {
+      return this.subscriptions?.getTrialSubscription()
+    },
+    activeSubscription (): Subscription | undefined {
       if (!this.subscriptions) {
         return undefined
       }
-      return this.subscriptions.hasActiveSubscription()
+      return this.subscriptions.getActiveAndNonTrialSubscription()
     }
   },
   watch: {
@@ -407,6 +421,10 @@ export default Vue.extend({
       }
       if (typeof this.lastNameQuery === 'string') {
         this.memberRegistration.name = this.lastNameQuery
+      }
+      // set trial subscription to cancel
+      if (this.trialSubscription && !this.trialSubscription.isDeactivated()) {
+        this.memberRegistration.deactivateSubscriptionId = this.trialSubscription.id
       }
     },
     selectPaymentProvider (paymentMethod: PaymentMethod): void {
@@ -561,7 +579,7 @@ export default Vue.extend({
     },
     hasActiveSubscriptions () {
       // open dialog
-      if (this.activeSubscriptions) {
+      if (!!this.activeSubscription) {
         this.subscriptionsDialog = true
         return true
       }

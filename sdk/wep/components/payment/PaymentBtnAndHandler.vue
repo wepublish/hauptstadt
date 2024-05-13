@@ -31,12 +31,12 @@
       <span v-else>
         <!-- extend subscription -->
         <span v-if="mode === 'extendSubscription'">
-          <span v-if="subscription.extendable">
-            <span class="fal fa-plus mr-1" />
-            Abo verlängern
+          <span v-if="isTrialSubscription">
+            Reguläres Abo lösen
           </span>
           <span v-else>
-            Reguläres Abo lösen
+            <span class="fal fa-plus mr-1" />
+            Abo verlängern
           </span>
         </span>
 
@@ -82,20 +82,27 @@
     <!-- payrexx migration dialog -->
     <v-dialog
       v-model="payrexxMigrationDialog"
+      @click:outside="pay()"
       max-width="550px"
     >
       <v-card>
+        <v-btn
+          icon
+          large
+          style="top: 0; right: 0; position: absolute;"
+          @click="pay()"
+        >
+          <span class="fal fa-times fa-2x"/>
+        </v-btn>
         <v-card-title>
           Künftig noch einfacher: Automatische Bezahlung
         </v-card-title>
         <v-card-text>
           <p>
-            Jedes Mal, wenn Dein Hauptstadt-Abo erneuert wird oder Du ein neues lösen willst, musstest Du Deine Zahlungsdaten eingeben.
-            Genau wie jetzt. Das haben wir für die Zukunft vereinfacht. Wenn du einverstanden bist,
-            werden wir bei der nächsten Verlängerung oder beim Kauf des nächsten Abos die Zahlung automatisch belasten. Das spart dir Zeit und verschafft uns etwas mehr Sicherheit.
+            Wir haben den Twint-Zahlungsprozess für dich vereinfacht. Sofern du uns dein Einverständnis gibst, wird dein Abo in Zukunft automatisch verlängert. Selbstverständlich werden wir dich vor jeder Abbuchung transparent und rechtzeitig per Mail daran erinnern. Du kannst das Abo auch jederzeit kündigen.
           </p>
           <p>
-            Wenn Du damit nicht einverstanden bist, senden wir Dir künftig eine Rechnung per E-Mail, die Du hernach begleichen kannst.
+            Wenn Du damit nicht einverstanden bist, senden wir Dir künftig eine QR-Rechnung per E-Mail, die Du hernach begleichen kannst.
           </p>
         </v-card-text>
         <v-card-actions
@@ -103,6 +110,7 @@
         >
           <v-btn
             outlined
+            color="grey"
             @click="openSwitchDialog()"
           >
             Nein, auf Rechnung wechseln
@@ -203,6 +211,7 @@ import Invoices from '~/sdk/wep/models/invoice/Invoices'
 import SubscriptionService from '~/sdk/wep/services/SubscriptionService'
 import MemberService from '~/sdk/wep/services/MemberService'
 import MemberRegistration from '~/sdk/wep/models/member/MemberRegistration'
+import {PropertyValue} from '~/sdk/wep/models/properties/Property'
 
 export default Vue.extend({
   name: 'PaymentBtnAndHandler',
@@ -273,6 +282,9 @@ export default Vue.extend({
     },
     btnDisabled (): boolean {
       return this.disabled || this.autoPayrexxPayment || this.autoChargingPayment
+    },
+    isTrialSubscription (): boolean {
+      return this.subscription.isTrialSubscription()
     }
   },
   watch: {
@@ -301,7 +313,7 @@ export default Vue.extend({
         // directly go to payment
         this.pay()
       } else if (this.mode === 'extendSubscription') {
-        if (!this.subscription.extendable) {
+        if (this.isTrialSubscription) {
           this.$router.push('/p/abo')
         } else {
           // open confirm dialog
@@ -496,7 +508,8 @@ export default Vue.extend({
         paymentPeriodicity: this.subscription.paymentPeriodicity,
         paymentMethodId: bexioPaymentId,
         successURL: this.$config.PAYMENT_SUCCESS_URL,
-        failureURL: this.$config.PAYMENT_FAILURE_URL
+        failureURL: this.$config.PAYMENT_FAILURE_URL,
+        deactivateSubscriptionId: this.subscription.id
       } as MemberRegistration
       const memberService = new MemberService({vue: this})
       const paymentResponse = await memberService.createSubscription({memberRegistration})
@@ -506,11 +519,7 @@ export default Vue.extend({
         return false
       }
       
-      // 4. cancel current subscription
-      const subscriptionService = new SubscriptionService({vue: this})
-      await subscriptionService.cancelUserSubscription({subscriptionId: this.subscription.id})
-      
-      // 5. reload user subscriptions
+      // 4. reload user subscriptions
       await this.refreshUserData()
     },
 

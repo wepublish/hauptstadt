@@ -2,7 +2,7 @@
   <v-row>
     <!-- ERROR: member plan type not available -->
     <v-col
-      v-if="!loadingMemberPlans && !memberPlansByType.length"
+      v-if="!loadingMemberPlans && !memberPlansToShow.length"
       class="col-12"
     >
       <v-alert
@@ -31,10 +31,10 @@
         >
           <v-row class="justify-center">
             <v-col
-              v-for="(memberPlan, memberPlanId) in memberPlansByType"
+              v-for="(memberPlan, memberPlanId) in memberPlansToShow"
               :key="memberPlan.id"
               class="col-12 col-sm-6 col-md-4 py-2"
-              :class="{'grey--text': memberPlan.name.startsWith('(Ich kann')}"
+              :class="{'grey--text': hasDisabledStyleTag(memberPlan)}"
             >
               <v-row class="no-gutters">
                 <!-- button -->
@@ -74,7 +74,7 @@
                   <!-- description -->
                   <p
                     :class="[hasDisabledStyleTag(memberPlan) ? 'font-size-12' : '']"
-                    v-html="memberPlan.getHtmlOfDescription({})"
+                    v-html="memberPlan.getHtmlOfDescription({fontClassHeadings: ''})"
                   />
                 </v-col>
               </v-row>
@@ -125,6 +125,8 @@ import { VForm } from '~/sdk/wep/interfacesAndTypes/Vuetify'
 import ImgLoadingSlot from '~/sdk/wep/components/img/ImgLoadingSlot.vue'
 import IconsOfPaymentProviders from '~/sdk/wep/models/paymentMethod/IconsOfPaymentProviders'
 import { RegistrationFormField } from '~/sdk/wep/interfacesAndTypes/Custom'
+import Subscription from '~/sdk/wep/models/subscription/Subscription'
+import Subscriptions from '~/sdk/wep/models/subscription/Subscriptions'
 
 export default Vue.extend({
   name: 'CreateMemberPlan',
@@ -199,14 +201,24 @@ export default Vue.extend({
         return memberPlan.slug.toLowerCase().includes(this.currentMemberPlanType as string)
       })
     },
+    // do not show member-plans with max count to user (in case he or she already reaches this limit)
+    memberPlansToShow (): MemberPlan[] {
+      const myMemberPlans = (this.$store.getters['auth/me']?.subscriptions as Subscriptions)?.subscriptions.map(subscription => subscription.memberPlan) || []
+      return this.memberPlansByType.filter(memberPlan => {
+        if (!memberPlan.maxCount) return true
+        const hasMemberPlanWithMaxCount = myMemberPlans.find(myMemberPlan => myMemberPlan?.id === memberPlan.id)
+        if (!hasMemberPlanWithMaxCount) return true
+        return hasMemberPlanWithMaxCount.maxCount < memberPlan.maxCount
+      })
+    },
     selectedMemberPlan (): undefined | MemberPlan {
       if (this.selectedMemberPlanId === undefined) {
         return undefined
       }
-      if (!this.memberPlansByType.length) {
+      if (!this.memberPlansToShow.length) {
         return undefined
       }
-      return this.memberPlansByType[this.selectedMemberPlanId]
+      return this.memberPlansToShow[this.selectedMemberPlanId]
     }
   },
   watch: {

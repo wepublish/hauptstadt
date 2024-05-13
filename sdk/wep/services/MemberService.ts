@@ -228,6 +228,7 @@ export default class MemberService extends Service {
           $paymentMethodId: ID
           $successURL: String
           $failureURL: String
+          $deactivateSubscriptionId: ID
         ) {
           createSubscription(
             autoRenew: $autoRenew
@@ -237,6 +238,7 @@ export default class MemberService extends Service {
             paymentMethodID: $paymentMethodId
             successURL: $successURL
             failureURL: $failureURL
+            deactivateSubscriptionId: $deactivateSubscriptionId
           ) {
             id
             intentSecret
