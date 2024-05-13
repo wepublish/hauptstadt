@@ -67,6 +67,10 @@ export default class Subscription {
     return !!this.paidUntil?.isSameOrAfter(today)
   }
 
+  public isTrialSubscription (): boolean {
+    return !!this.memberPlan?.hasTag('trial-subscription')
+  }
+
   isValidInvoiceSubscription(): boolean {
     const bexioType: PaymentMethodId = 'bexio'
     const invoiceOnly: PaymentMethodId = 'payrexx-invoice-only'

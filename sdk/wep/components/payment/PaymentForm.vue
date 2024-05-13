@@ -375,11 +375,14 @@ export default Vue.extend({
     subscriptions (): undefined | Subscriptions {
       return this.user?.subscriptions
     },
+    trialSubscription (): undefined | Subscription {
+      return this.subscriptions?.getTrialSubscription()
+    },
     activeSubscription (): Subscription | undefined {
       if (!this.subscriptions) {
         return undefined
       }
-      return this.subscriptions.hasActiveSubscription()
+      return this.subscriptions.getActiveAndNonTrialSubscription()
     }
   },
   watch: {
@@ -418,6 +421,10 @@ export default Vue.extend({
       }
       if (typeof this.lastNameQuery === 'string') {
         this.memberRegistration.name = this.lastNameQuery
+      }
+      // set subscription to cancel from query
+      if (this.trialSubscription && !this.trialSubscription.isDeactivated()) {
+        this.memberRegistration.deactivateSubscriptionId = this.trialSubscription.id
       }
     },
     selectPaymentProvider (paymentMethod: PaymentMethod): void {

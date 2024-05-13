@@ -31,12 +31,12 @@
       <span v-else>
         <!-- extend subscription -->
         <span v-if="mode === 'extendSubscription'">
-          <span v-if="subscription.extendable">
-            <span class="fal fa-plus mr-1" />
-            Abo verlängern
+          <span v-if="isTrialSubscription">
+            Reguläres Abo lösen
           </span>
           <span v-else>
-            Reguläres Abo lösen
+            <span class="fal fa-plus mr-1" />
+            Abo verlängern
           </span>
         </span>
 
@@ -211,6 +211,7 @@ import Invoices from '~/sdk/wep/models/invoice/Invoices'
 import SubscriptionService from '~/sdk/wep/services/SubscriptionService'
 import MemberService from '~/sdk/wep/services/MemberService'
 import MemberRegistration from '~/sdk/wep/models/member/MemberRegistration'
+import {PropertyValue} from '~/sdk/wep/models/properties/Property'
 
 export default Vue.extend({
   name: 'PaymentBtnAndHandler',
@@ -281,6 +282,9 @@ export default Vue.extend({
     },
     btnDisabled (): boolean {
       return this.disabled || this.autoPayrexxPayment || this.autoChargingPayment
+    },
+    isTrialSubscription (): boolean {
+      return this.subscription.isTrialSubscription()
     }
   },
   watch: {
@@ -309,7 +313,7 @@ export default Vue.extend({
         // directly go to payment
         this.pay()
       } else if (this.mode === 'extendSubscription') {
-        if (!this.subscription.extendable) {
+        if (this.isTrialSubscription) {
           this.$router.push('/p/abo')
         } else {
           // open confirm dialog

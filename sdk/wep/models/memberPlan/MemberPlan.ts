@@ -64,7 +64,7 @@ export default class MemberPlan {
     return new Slate({fontClassHeadings}).toHtml(this.description)
   }
 
-  public hasTag(findTag) {
+  public hasTag(findTag): boolean {
     return !!this.tags?.find(tag => tag === findTag)
   }
 
