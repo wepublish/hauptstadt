@@ -126,6 +126,15 @@
                   label="Mit automatischer Abo-Erneuerung"
                 />
               </v-col>
+              <!-- force auto renew hint -->
+              <v-col
+                v-if="selectedPaymentMethod && selectedPaymentMethod.forceAutoRenewal"
+                class="v-col"
+              >
+                <p class="mb-0">
+                  Automatische Abo-Erneuerung. Du erhältst von uns jährlich eine Erinnerungsmail und kannst jederzeit kündigen.
+                </p>
+              </v-col>
             </v-row>
           </v-col>
 

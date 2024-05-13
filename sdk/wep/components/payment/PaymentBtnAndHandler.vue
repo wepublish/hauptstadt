@@ -82,20 +82,27 @@
     <!-- payrexx migration dialog -->
     <v-dialog
       v-model="payrexxMigrationDialog"
+      @click:outside="pay()"
       max-width="550px"
     >
       <v-card>
+        <v-btn
+          icon
+          large
+          style="top: 0; right: 0; position: absolute;"
+          @click="pay()"
+        >
+          <span class="fal fa-times fa-2x"/>
+        </v-btn>
         <v-card-title>
           Künftig noch einfacher: Automatische Bezahlung
         </v-card-title>
         <v-card-text>
           <p>
-            Jedes Mal, wenn Dein Hauptstadt-Abo erneuert wird oder Du ein neues lösen willst, musstest Du Deine Zahlungsdaten eingeben.
-            Genau wie jetzt. Das haben wir für die Zukunft vereinfacht. Wenn du einverstanden bist,
-            werden wir bei der nächsten Verlängerung oder beim Kauf des nächsten Abos die Zahlung automatisch belasten. Das spart dir Zeit und verschafft uns etwas mehr Sicherheit.
+            Wir haben den Twint-Zahlungsprozess für dich vereinfacht. Sofern du uns dein Einverständnis gibst, wird dein Abo in Zukunft automatisch verlängert. Selbstverständlich werden wir dich vor jeder Abbuchung transparent und rechtzeitig per Mail daran erinnern. Du kannst das Abo auch jederzeit kündigen.
           </p>
           <p>
-            Wenn Du damit nicht einverstanden bist, senden wir Dir künftig eine Rechnung per E-Mail, die Du hernach begleichen kannst.
+            Wenn Du damit nicht einverstanden bist, senden wir Dir künftig eine QR-Rechnung per E-Mail, die Du hernach begleichen kannst.
           </p>
         </v-card-text>
         <v-card-actions
@@ -103,6 +110,7 @@
         >
           <v-btn
             outlined
+            color="grey"
             @click="openSwitchDialog()"
           >
             Nein, auf Rechnung wechseln
