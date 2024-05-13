@@ -32,8 +32,8 @@ export default class Subscriptions {
     return this.subscriptions.find(subscription => subscription.id === id)
   }
 
-  public hasActiveSubscription(): boolean {
-    return !!this.subscriptions.find(subscription => !subscription.deactivation)
+  public hasActiveSubscription(): Subscription | undefined {
+    return this.subscriptions.find(subscription => !subscription.deactivation)
   }
 
   public hasValidSubscription(): boolean {

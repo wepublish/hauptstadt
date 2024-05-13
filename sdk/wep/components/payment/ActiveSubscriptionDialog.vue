@@ -8,10 +8,10 @@
   >
     <v-card>
       <v-card-title>
-        Sie haben bereits ein aktives Abo.
+        Du hast noch ein aktives "{{memberPlanName}}"
       </v-card-title>
       <v-card-subtitle>
-        Wollen Sie ein zusätzliches lösen?
+        Willst du ein zusätzliches Abo lösen?
       </v-card-subtitle>
       <v-card-actions>
         <v-row
@@ -28,7 +28,7 @@
               elevation="0"
               @click="$emit('checkout')"
             >
-              Ja, zusätzliches Abo lösen
+              Ja, Abo lösen
             </v-btn>
           </v-col>
         </v-row>
@@ -39,6 +39,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import BackToBtn from '~/sdk/wep/components/helpers/BackToBtn.vue'
+import Subscription from '~/sdk/wep/models/subscription/Subscription'
 
 export default Vue.extend({
   name: 'ActiveSubscriptionDialog',
@@ -48,6 +49,16 @@ export default Vue.extend({
       type: Boolean as PropType<boolean>,
       required: true,
       default: false
+    },
+    activeSubscription: {
+      type: Object as PropType<Subscription | undefined>,
+      required: true,
+      default: undefined
+    }
+  },
+  computed: {
+    memberPlanName () : string | undefined {
+      return this.activeSubscription?.memberPlan?.name
     }
   }
 })

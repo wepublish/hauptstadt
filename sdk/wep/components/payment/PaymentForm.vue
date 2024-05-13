@@ -227,6 +227,7 @@
     <!-- active subscriptions -->
     <active-subscription-dialog
       v-model="subscriptionsDialog"
+      :active-subscription="activeSubscription"
       @checkout="checkout(false, false)"
     />
 
@@ -264,6 +265,7 @@ import ChallengeAnswer from '~/sdk/wep/models/challenge/ChallengeAnswer'
 import ActiveSubscriptionDialog from '~/sdk/wep/components/payment/ActiveSubscriptionDialog.vue'
 import RedirectDialog from '~/sdk/wep/components/payment/RedirectDialog.vue'
 import OpenInvoiceDialog from '~/sdk/wep/components/payment/OpenInvoiceDialog.vue'
+import Subscription from '~/sdk/wep/models/subscription/Subscription'
 
 export default Vue.extend({
   name: 'PaymentForm',
@@ -364,7 +366,7 @@ export default Vue.extend({
     subscriptions (): undefined | Subscriptions {
       return this.user?.subscriptions
     },
-    activeSubscriptions (): undefined | boolean {
+    activeSubscription (): Subscription | undefined {
       if (!this.subscriptions) {
         return undefined
       }
@@ -561,7 +563,7 @@ export default Vue.extend({
     },
     hasActiveSubscriptions () {
       // open dialog
-      if (this.activeSubscriptions) {
+      if (!!this.activeSubscription) {
         this.subscriptionsDialog = true
         return true
       }
