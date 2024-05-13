@@ -199,6 +199,7 @@ import AuthorsLine from '~/components/author/AuthorsLine.vue'
 import ImgLoadingSlot from '~/sdk/wep/components/img/ImgLoadingSlot.vue'
 import PeerArticleTeaser from '~/sdk/wep/models/teaser/PeerArticleTeaser'
 import PeeringImgOverlay from '~/components/blocks/PeeringImgOverlay.vue'
+import { LoginBypass } from '~/sdk/wep/utils'
 
 export default Vue.extend({
   name: 'TeaserGridBlockView',
@@ -264,7 +265,8 @@ export default Vue.extend({
         // article id is for paywall purposes. see WepPublication.vue
         const baseUrl = `/a/${teaser?.wepPublication?.slug}`
         const hasAccess = this.$store.getters['auth/hasAccess']
-        return hasAccess ? baseUrl : `${baseUrl}?articleId=${teaser.wepPublication?.id}`
+        const loginBypass = (new LoginBypass(this.$cookies).check())
+        return (hasAccess || loginBypass) ? baseUrl : `${baseUrl}?articleId=${teaser.wepPublication?.id}`
       } else if (teaser.__typename === 'PageTeaser') {
         return `/p/${teaser?.wepPublication?.slug}`
       }

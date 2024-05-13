@@ -40,6 +40,7 @@ import { MetaInfo } from 'vue-meta'
 import Page from '~/sdk/wep/models/wepPublication/page/Page'
 import PageService from '~/sdk/wep/services/PageService'
 import BlocksView from '~/components/blocks/BlocksView.vue'
+import { LoginBypass } from '~/sdk/wep/utils'
 
 export default Vue.extend({
   name: 'IndexPage',
@@ -84,6 +85,16 @@ export default Vue.extend({
   async beforeMount () {
     // fixes https://hauptstadt.atlassian.net/browse/HA-121
     await this.$vuetify.goTo(0, { duration: 0 })
+
+    const loginBypass = new LoginBypass(this.$cookies)
+    const enabled = loginBypass.enable(this.$route.query.key as string)
+
+    if (enabled) {
+      // remove 'key' query param
+      const query = Object.assign({}, this.$route.query);
+      delete query.key;
+      this.$router.replace({ query });
+    }
 
     const page = await this.loadPage()
     if (!page) {
