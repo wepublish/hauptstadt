@@ -422,7 +422,7 @@ export default Vue.extend({
       if (typeof this.lastNameQuery === 'string') {
         this.memberRegistration.name = this.lastNameQuery
       }
-      // set subscription to cancel from query
+      // set trial subscription to cancel
       if (this.trialSubscription && !this.trialSubscription.isDeactivated()) {
         this.memberRegistration.deactivateSubscriptionId = this.trialSubscription.id
       }
