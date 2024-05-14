@@ -1,9 +1,9 @@
 name: Publish main docker image
 
 on:
-  push:
-    branches:
-      - main
+  create:
+    tags:
+      - '*'  
 
 jobs:
   date_sha_tag:
@@ -19,6 +19,6 @@ jobs:
     uses: ./.github/workflows/on-demand-publish-docker-image.yml
     with:
       tags: |
-        ghcr.io/wepublish/hauptstadt:main-${{ needs.date_sha_tag.outputs.tag }}
-        ghcr.io/wepublish/hauptstadt:main
+        ghcr.io/wepublish/hauptstadt:production-${{ needs.date_sha_tag.outputs.tag }}
+        ghcr.io/wepublish/hauptstadt:production
     secrets: inherit
