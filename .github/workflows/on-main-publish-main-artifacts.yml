@@ -1,9 +1,9 @@
 name: Publish main docker image
 
 on:
-  create:
-    tags:
-      - '*'  
+  push:
+    branches:
+      - main
 
 jobs:
   date_sha_tag:
@@ -14,11 +14,11 @@ jobs:
       - id: image_tag
         run: echo "::set-output name=tag::$(date +%s)-${{ github.sha }}"
 
-  publish_master_docker:
+  publish_main_docker:
     needs: date_sha_tag
     uses: ./.github/workflows/on-demand-publish-docker-image.yml
     with:
       tags: |
-        ghcr.io/wepublish/hauptstadt:production-${{ needs.date_sha_tag.outputs.tag }}
-        ghcr.io/wepublish/hauptstadt:production
+        ghcr.io/wepublish/hauptstadt:main-${{ needs.date_sha_tag.outputs.tag }}
+        ghcr.io/wepublish/hauptstadt:main
     secrets: inherit
