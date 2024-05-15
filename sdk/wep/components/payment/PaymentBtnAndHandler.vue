@@ -71,7 +71,7 @@
           </v-btn>
           <v-btn
             color="primary"
-            @click="pay()"
+            @click="userWantToExtendSubscription()"
           >
             Jetzt verlängern
           </v-btn>
@@ -319,6 +319,16 @@ export default Vue.extend({
           // open confirm dialog
           this.extendDialog = true
         }
+      }
+    },
+    
+    // deprecated after 01.05.2024
+    userWantToExtendSubscription (): void {
+      if (this.openPayrexxDialoge()) {
+        this.closeDialogs()
+        this.payrexxMigrationDialog = true
+      } else {
+        this.pay()
       }
     },
 
