@@ -145,7 +145,9 @@ export default Vue.extend({
       if (this.isSearchPage) {
         const searchQuery: string = this.$route.query.query as string
         articles = await new PhraseService({ vue: this }).searchPhrase({
-          searchQuery
+          searchQuery,
+          take: this.teaserCount,
+          skip
         })
         // Sort articles by publication date, newest first
         if (articles) {
@@ -172,9 +174,6 @@ export default Vue.extend({
       // archive page exception: subtract one page, because we set the second page as the first. thus, the last page has to be one bellow.
       if (this.isArchivePage && totalPages > 1) {
         totalPages -= 1
-      }
-      if (this.isSearchPage) {
-        totalPages = 1
       }
       this.pagination!.update({ totalPages })
       return articles
