@@ -1,7 +1,7 @@
 <template>
   <v-alert type="info" color="primary">
     Das IT-Team führt gerade Unterhaltsarbeiten durch. Deshalb steht die {{ offlineFunction }}-Funktion derzeit nicht zur Verfügung.
-    Wir freuen uns sehr, wenn Du in einer Weile nochmals vorbeischaust. Danke für Dein Verständnis.
+    Wir freuen uns sehr, wenn du in einer Weile nochmals vorbeischaust. Danke für dein Verständnis.
   </v-alert>
 </template>
 

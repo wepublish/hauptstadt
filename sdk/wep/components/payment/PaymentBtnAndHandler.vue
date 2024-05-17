@@ -102,7 +102,7 @@
             Wir haben den Twint-Zahlungsprozess für dich vereinfacht. Sofern du uns dein Einverständnis gibst, wird dein Abo in Zukunft automatisch verlängert. Selbstverständlich werden wir dich vor jeder Abbuchung transparent und rechtzeitig per Mail daran erinnern. Du kannst das Abo auch jederzeit kündigen.
           </p>
           <p>
-            Wenn Du damit nicht einverstanden bist, senden wir Dir künftig eine QR-Rechnung per E-Mail, die Du hernach begleichen kannst.
+            Wenn du damit nicht einverstanden bist, senden wir dir künftig eine QR-Rechnung per E-Mail, die du hernach begleichen kannst.
           </p>
         </v-card-text>
         <v-card-actions
@@ -133,7 +133,7 @@
     >
       <v-card>
         <v-card-title>
-          Bist Du sicher?
+          Bist du sicher?
         </v-card-title>
         <v-card-text>
           Dein aktuelles Abo wird gekündet und ein neues wird auf Rechnung erstellt.
@@ -165,7 +165,7 @@
         <v-card-title>
           <v-row class="no-gutters justify-space-between">
             <v-col class="col-auto">
-              Bitte gib Deine Kreditkarten-Daten ein
+              Bitte gib deine Kreditkarten-Daten ein
             </v-col>
             <v-col class="col-auto">
               <v-btn

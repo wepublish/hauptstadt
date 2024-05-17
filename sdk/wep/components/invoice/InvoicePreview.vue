@@ -76,7 +76,7 @@
           <v-alert outlined type="error">
             Wir haben vor einiger Zeit das Membersystem umgestellt. Du verfügst noch über eine alte Membership,
             die nicht mehr automatisch erneuert werden konnte – z. B. weil die Kreditkarte abgelaufen ist. Löse ganz
-            einfach hier ein neues Abo. Die unbezahlte Rechnung kannst Du ignorieren. Herzlichen Dank.
+            einfach hier ein neues Abo. Die unbezahlte Rechnung kannst du ignorieren. Herzlichen Dank.
           </v-alert>
         </v-col>
         <!-- invoice can be paid by payrexx invoice only -->
