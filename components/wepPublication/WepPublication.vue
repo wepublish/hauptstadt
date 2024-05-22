@@ -217,6 +217,7 @@ import PagePropertiesContent from '~/components/wepPublication/PagePropertiesCon
 import CrowdfundingBlock from '~/sdk/wep/models/block/CrowdfundingBlock'
 import UserInteractionOffline from '~/sdk/wep/components/helpers/UserInteractionOffline.vue'
 import TextZoom from '~/components/helpers/TextZoom.vue'
+import { LoginBypass } from '~/sdk/wep/utils'
 
 export default Vue.extend({
   name: 'WepPublication',
@@ -384,7 +385,8 @@ export default Vue.extend({
         startPath = currentPath
       }
       const paywallKey = this.$route.query.articleId
-      if (startPath !== currentPath || paywallKey) {
+      const loginBypass = (new LoginBypass(this.$cookies).check())
+      if ((startPath !== currentPath || paywallKey) && !loginBypass) {
         // apply paywall
         blocks?.removeBlocks(3)
         this.showPaywall = true
