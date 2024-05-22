@@ -65,6 +65,10 @@ export default {
       {rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png'},
       {rel: 'manifest', href: '/site.webmanifest'},
       {rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#000000'}
+    ],
+    script: [
+      { src: `${process.env.WEP_API_URL_CLIENT.replace('/v1', '')}/static/head.js` },
+      { src: `${process.env.WEP_API_URL_CLIENT.replace('/v1', '')}/static/body.js`, body: true },
     ]
   },
   publicRuntimeConfig: {
