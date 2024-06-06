@@ -69,6 +69,14 @@ export default Vue.extend({
       overlay: false
     }
   },
+  head() {
+    return {
+      script: [
+        { src: `${this.$nuxt.context.$config.WEP_API_URL_CLIENT.replace('/v1', '')}/static/head.js` },
+        { src: `${this.$nuxt.context.$config.WEP_API_URL_CLIENT.replace('/v1', '')}/static/body.js`, body: true },
+      ]
+    }
+  },
   computed: {
     redirectUrl (): string | undefined {
       return this.$nuxt.context.$config.REDIRECT_URL

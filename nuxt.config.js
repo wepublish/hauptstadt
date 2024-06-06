@@ -93,7 +93,9 @@ export default {
     // HAS internal
     MEDIUM_SLUG: 'HAS'
   },
-  privateRuntimeConfig: {},
+  privateRuntimeConfig: {
+    WEP_API_URL_CLIENT: process.env.WEP_API_URL_CLIENT
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [

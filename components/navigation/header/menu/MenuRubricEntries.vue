@@ -75,8 +75,7 @@ export default Vue.extend({
       if (activeElement) {
         activeElement.blur()
       }
-      const preparedSearchQuery = this.searchQuery.replace(' ', ' & ')
-      const link = `/p/search?query=${preparedSearchQuery}`
+      const link = `/p/search?query=${this.searchQuery}`
       this.searchQuery = ''
       await this.$router.push(link)
       this.$store.commit('navigation/closeMenu')
