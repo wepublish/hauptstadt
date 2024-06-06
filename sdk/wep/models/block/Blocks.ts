@@ -103,9 +103,15 @@ export default class Blocks {
   }
 
   public removeBlocks(blocksLeft: number): void {
-    while (this.blocks.length > blocksLeft) {
-      this.blocks.pop()
-    }
+    this.blocks.forEach((block, blockIndex) => {
+      if (blockIndex >= blocksLeft) {
+        block.hiddenByPaywall = true
+      }
+    })
+  }
+
+  public revealRemovedBlocks (): void {
+    this.blocks.forEach((block) => block.hiddenByPaywall = false)
   }
 
   public getLastBlock(): BlockTypes {

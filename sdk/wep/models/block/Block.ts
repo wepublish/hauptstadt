@@ -19,12 +19,15 @@ export type BlockTypename =
 
 export interface BlockProps {
   __typename: BlockTypename
+  hiddenByPaywall?: boolean
 }
 
 export default class Block {
   public __typename: BlockTypename
+  public hiddenByPaywall?: boolean
 
-  constructor({__typename}: BlockProps) {
+  constructor({__typename, hiddenByPaywall}: BlockProps) {
     this.__typename = __typename
+    this.hiddenByPaywall = !!hiddenByPaywall
   }
 }

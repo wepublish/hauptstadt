@@ -7,6 +7,7 @@
         class="justify-center my-0"
       >
         <v-col
+          v-if="!block.hiddenByPaywall"
           class="col-auto w-100 px-sm-0"
           :class="{
             'max-width-520': isBoxed520(block),

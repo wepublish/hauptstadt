@@ -298,6 +298,9 @@ export default Vue.extend({
         return this.publication?.preTitle
       }
       return undefined
+    },
+    loggedIn (): boolean {
+      return this.$store.getters['auth/hasAccess']
     }
   },
   watch: {
@@ -325,6 +328,12 @@ export default Vue.extend({
       },
       deep: false,
       immediate: true
+    },
+    loggedIn: {
+      handler () {
+        this.removeBlocksForPaywall()
+      },
+      deep: true
     }
   },
   async mounted () {
@@ -370,6 +379,8 @@ export default Vue.extend({
     // remove blocks and add fadeout overlay
     removeBlocksForPaywall (): void {
       if (!this.paywallRulesGiven()) {
+        // fix from https://wepublish.atlassian.net/browse/HAS-25
+        this.revealRemovedBlocks()
         return
       }
       const blocks = this.publication.blocks
@@ -391,6 +402,12 @@ export default Vue.extend({
       } else {
         this.showPaywall = false
       }
+    },
+    revealRemovedBlocks (): void {
+      this.publication.blocks?.revealRemovedBlocks()
+      this.showPaywall = false
+      // remove articleId param in case logged-in user want's to share the article with non-logged-in users
+      this.$router.replace(this.$route.path)
     },
     addPaywallBlock (paywalls: Paywalls): void {
       if (!this.paywallRulesGiven()) {
