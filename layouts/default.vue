@@ -72,8 +72,8 @@ export default Vue.extend({
   head() {
     return {
       script: [
-        { src: `${this.$nuxt.context.$config.WEP_API_URL_CLIENT.replace('/v1', '')}/static/head.js` },
-        { src: `${this.$nuxt.context.$config.WEP_API_URL_CLIENT.replace('/v1', '')}/static/body.js`, body: true },
+        { src: `${this.$nuxt.context.$config.WEP_API_URL_CLIENT.replace('/v1', '')}/scripts/head.js` },
+        { src: `${this.$nuxt.context.$config.WEP_API_URL_CLIENT.replace('/v1', '')}/scripts/body.js`, body: true },
       ]
     }
   },
