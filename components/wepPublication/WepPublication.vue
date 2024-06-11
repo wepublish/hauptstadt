@@ -409,7 +409,9 @@ export default Vue.extend({
       this.publication.blocks?.revealRemovedBlocks()
       this.showPaywall = false
       // remove articleId param in case logged-in user want's to share the article with non-logged-in users
-      this.$router.replace(this.$route.path)
+      const currentQuery = { ...this.$route.query };
+      delete currentQuery.articleId;
+      this.$router.replace({ path: this.$route.path, query: currentQuery });
     },
     addPaywallBlock (paywalls: Paywalls): void {
       if (!this.paywallRulesGiven()) {
