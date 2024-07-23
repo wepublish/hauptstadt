@@ -6,19 +6,19 @@ on:
       - '*'  
 
 jobs:
-  date_sha_tag:
+  release_version:
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.image_tag.outputs.tag }}
+      version: ${{ steps.version.outputs.version }}
     steps:
-      - id: image_tag
-        run: echo "::set-output name=tag::$(date +%s)-${{ github.sha }}"
+      - id: version
+        run: echo "::set-output name=version::${GITHUB_REF#refs/*/}"
 
   publish_production_docker:
     needs: date_sha_tag
     uses: ./.github/workflows/on-demand-publish-docker-image.yml
     with:
       tags: |
-        ghcr.io/wepublish/hauptstadt:production-${{ needs.date_sha_tag.outputs.tag }}
-        ghcr.io/wepublish/hauptstadt:production
+        ghcr.io/wepublish/hauptstadt:${{ needs.release_version.outputs.version }}
+        ghcr.io/wepublish/hauptstadt:latest
     secrets: inherit
