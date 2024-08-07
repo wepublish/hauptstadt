@@ -18,6 +18,7 @@ import Articles from '~/sdk/wep/models/wepPublication/article/Articles'
 import YouTubeVideoBlock from '~/sdk/wep/models/block/YouTubeVideoBlock'
 import HTMLBlock from '~/sdk/wep/models/block/HTMLBlock'
 import Block from '../../block/Block'
+import Tag from '~/sdk/wep/models/tags/Tag'
 
 export default class Page extends WepPublication {
   public description: string
@@ -133,7 +134,9 @@ export default class Page extends WepPublication {
       slug
       url
       title
-      tags
+      tags {
+        ...tag
+      }
       properties {
         ...property
       }
@@ -202,6 +205,7 @@ export default class Page extends WepPublication {
     ${InstagramPostBlock.instagramPostBlockFragment}
     ${LinkPageBreakBlock.linkPageBreakBlockFragment}
     ${YouTubeVideoBlock.youTubeVideoBlockFragment}
-    ${HTMLBlock.htmlBlockFragment}
+    ${HTMLBlock.htmlBlockFragment},
+    ${Tag.tagFragment}
   `
 }

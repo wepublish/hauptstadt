@@ -23,6 +23,8 @@ import Comment from '~/sdk/wep/models/comment/Comment'
 import YouTubeVideoBlock from '~/sdk/wep/models/block/YouTubeVideoBlock'
 import PollBlock from '~/sdk/wep/models/block/PollBlock'
 import HTMLBlock from '~/sdk/wep/models/block/HTMLBlock'
+import Tag from '~/sdk/wep/models/tags/Tag'
+import Tags from '~/sdk/wep/models/tags/Tags'
 
 export default class Article extends WepPublication {
   public preTitle?: string
@@ -57,7 +59,7 @@ export default class Article extends WepPublication {
     title: string
     preTitle?: string
     lead: string
-    tags: string[]
+    tags: Tags
     properties?: Properties
     image?: WepImage
     authors?: Authors
@@ -102,7 +104,9 @@ export default class Article extends WepPublication {
       title
       lead
       seoTitle
-      tags
+      tags {
+        ...tag
+      }
       canonicalUrl
       properties {
         ...property
@@ -188,6 +192,7 @@ export default class Article extends WepPublication {
     ${YouTubeVideoBlock.youTubeVideoBlockFragment}
     ${PollBlock.pollBlockFragment}
     ${HTMLBlock.htmlBlockFragment}
+    ${Tag.tagFragment}
   `
 
   /**
@@ -204,7 +209,9 @@ export default class Article extends WepPublication {
       title
       lead
       seoTitle
-      tags
+      tags {
+        ...tag
+      }
       canonicalUrl
       image {
         ...image
@@ -270,5 +277,6 @@ export default class Article extends WepPublication {
     ${InstagramPostBlock.instagramPostBlockFragment}
     ${LinkPageBreakBlock.linkPageBreakBlockFragment}
     ${YouTubeVideoBlock.youTubeVideoBlockFragment}
+    ${Tag.tagFragment}
   `
 }
