@@ -4,7 +4,11 @@
     :publication="page"
     :pagination="pagination"
     @goToPage="goToPage"
-  />
+  >
+    <template #preview>
+      <slot name="#preview"/>
+    </template>
+  </wep-publication>
 </template>
 
 <script lang="ts">
