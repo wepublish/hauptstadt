@@ -5,32 +5,18 @@ const extendRoutes: NuxtRouteConfig[] = [
     path: '/a/:articleId/:articleSlug',
     redirect: '/a/:articleSlug'
   },
+  // backwards compatibility for pages because of https://wepublish.atlassian.net/browse/HAS-23
+  {
+    path: '/p/:pageSlug',
+    redirect: '/:pageSlug'
+  },
   {
     path: '/p/:pageId/:pageSlug',
-    redirect: '/p/:pageSlug'
-  },
-  // login
-  {
-    path: '/login',
-    redirect: '/p/login'
-  },
-  // abo
-  {
-    path: '/abo',
-    redirect: '/p/abo'
-  },
-  {
-    path: '/geschenkabo',
-    redirect: '/p/geschenkabo'
-  },
-  // hotfix not working api login link
-  {
-    path: '/login/:key',
-    redirect: '/p/login?:key'
+    redirect: '/:pageSlug'
   },
   {
     path: '/l/etikette',
-    redirect: '/p/unsere-etikette'
+    redirect: '/unsere-etikette'
   },
   // backwards compatibility for pages and articles because of https://hauptstadt.atlassian.net/browse/HA-82
   // articles
@@ -40,7 +26,7 @@ const extendRoutes: NuxtRouteConfig[] = [
   },
   {
     path: '/page/:pageSlug',
-    redirect: '/p/:pageSlug'
+    redirect: '/:pageSlug'
   },
   // nice links for print magazine 2024
   {
