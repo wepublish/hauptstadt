@@ -1,6 +1,6 @@
 import {gql} from 'graphql-tag'
 
-export type TagType = 'Comment'
+export type TagType = 'Comment' | 'Event' | 'Author' | 'Article' | 'Page'
 
 export interface TagProps {
   id: string

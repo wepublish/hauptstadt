@@ -22,6 +22,8 @@ import { ArticleFilter, SortOrder } from '~/sdk/wep/interfacesAndTypes/WePublish
 import Articles from '~/sdk/wep/models/wepPublication/article/Articles'
 import Pagination from '~/sdk/wep/models/wepPublication/Pagination'
 import PhraseService from '~/sdk/wep/services/PhraseService'
+import TagService from '~/sdk/wep/services/TagService'
+import Tag from '~/sdk/wep/models/tags/Tag'
 
 export default Vue.extend({
   name: 'PageSlug',
@@ -136,8 +138,14 @@ export default Vue.extend({
       // in case of archive page, do not set any filter, instead load all articles no matter what tags are set
       let filter: ArticleFilter | undefined
       if (!this.isArchivePage && !this.isSearchPage) {
+        // get tag ids
+        const tag = await this.getTagFromRubricProperty()
+        if (!tag) {
+          return false
+        }
+
         filter = {
-          tags: [this.rubricProperty]
+          tags: [tag.id]
         }
       }
       // in case of archive page, skip first page, since these articles are shown on the front page
@@ -207,6 +215,21 @@ export default Vue.extend({
       const teaserGridBlockEl = document.getElementById('teaser-grid-block-view-0')
       if (!teaserGridBlockEl) { return }
       teaserGridBlockEl.scrollIntoView()
+    },
+    async getTagFromRubricProperty (): Promise<Tag | undefined> {
+      if (!this.rubricProperty) {
+        return
+      }
+      const tags = await new TagService({vue: this}).getTags({
+        filter: {
+          tag: this.rubricProperty
+        },
+        take: 100
+      })
+      if (!tags) {
+        return
+      }
+      return tags.tags.find(tag => tag.tag === this.rubricProperty)
     }
   }
 })
