@@ -59,7 +59,7 @@ export default class Article extends WepPublication {
     title: string
     preTitle?: string
     lead: string
-    tags: Tags
+    tags?: Tags
     properties?: Properties
     image?: WepImage
     authors?: Authors
