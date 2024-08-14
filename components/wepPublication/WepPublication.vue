@@ -3,6 +3,11 @@
     v-if="publication"
     class="justify-center px-sm-10 px-md-8 px-lg-16 pb-10"
   >
+    <v-col
+      v-if="$slots['preview']"
+      class="col-12">
+      <slot name="preview"/>
+    </v-col>
     <!-- max 840px -->
     <!-- image -->
     <v-col

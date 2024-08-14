@@ -6,6 +6,7 @@ import Properties from '~/sdk/wep/models/wepPublication/page/Properties'
 import Blocks, {BlockTypes} from '~/sdk/wep/models/block/Blocks'
 import Block from '~/sdk/wep/models/block/Block'
 import TeaserGridBlock from '~/sdk/wep/models/block/TeaserGridBlock'
+import Tags from '~/sdk/wep/models/tags/Tags'
 
 export default class WepPublication {
   public id: string
@@ -14,7 +15,7 @@ export default class WepPublication {
   public slug: string
   public url: string
   public title: string
-  public tags: string[]
+  public tags?: Tags
   public properties?: Properties
   public image?: WepImage
   public socialMediaTitle: string
@@ -44,7 +45,7 @@ export default class WepPublication {
     slug: string
     url: string
     title: string
-    tags: string[]
+    tags?: Tags
     properties?: Properties
     image?: WepImage
     socialMediaTitle: string
@@ -58,7 +59,7 @@ export default class WepPublication {
     this.slug = slug
     this.url = url
     this.title = title
-    this.tags = tags
+    this.tags = tags ? new Tags().parse(tags) : undefined
     this.properties = properties
       ? new Properties().parse(properties as unknown as Property[])
       : undefined
@@ -105,7 +106,7 @@ export default class WepPublication {
   }): MetaInfo {
     const title = this.socialMediaTitle || this?.title || ''
     const lead = this.socialMediaDescription || description || ''
-    const keywords = (this.tags || []).join(', ')
+    const keywords = (this.tags?.tags || []).map(tag => tag.tag).join(', ')
     const url = `${baseUrl}/a/${this?.slug}`
     let fallbackImageUrl
     try {
