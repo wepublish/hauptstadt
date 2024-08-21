@@ -97,7 +97,7 @@
       >
         <v-col
           class="col-6 offset-3 col-sm-4 offset-sm-4 abc-bold font-size-15 font-size-sm-20 font-size-md-24 font-size-lg-26 px-0 px-sm-3 text-center"
-          @click="$router.push('/p/abo')"
+          @click="$router.push('/abo')"
         >
           {{ currentPaywall.minimizedTitle }}
         </v-col>
@@ -109,7 +109,7 @@
             :small="$vuetify.breakpoint.xsOnly"
             :large="$vuetify.breakpoint.mdOnly"
             :x-large="$vuetify.breakpoint.lgAndUp"
-            @click="$router.push(`/p/login?redirectPathOnLoginSuccess=${currentPath}`)"
+            @click="$router.push(`/login?redirectPathOnLoginSuccess=${currentPath}`)"
           >
             Login
           </v-btn>

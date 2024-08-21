@@ -45,7 +45,7 @@
             <!-- etikette -->
             <nuxt-link
               v-else
-              to="/p/unsere-etikette"
+              to="/unsere-etikette"
               class="caption-12 caption-sm-14"
             >
               Unsere Etikette
@@ -83,7 +83,7 @@
       >
         <p>
           Bitte einloggen, um mitzudiskutieren. Falls du kein Login besitzt,
-          <nuxt-link to="/p/abo">
+          <nuxt-link to="/abo">
             löse gerne eines unserer Abos.
           </nuxt-link>
         </p>

@@ -44,7 +44,7 @@ export default Vue.extend({
     }
     return this.seoArticle.getSeoHead({
       description: this.seoArticle?.lead,
-      baseUrl: this.$config.BASE_URL,
+      baseUrl: `${this.$config.BASE_URL}/a`,
       fallBackImageUrlPath: require('~/assets/images/logo-with-claim.png')
     })
   },

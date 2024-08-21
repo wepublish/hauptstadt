@@ -16,7 +16,7 @@
               <v-btn
                 outlined
                 nuxt
-                to="/p/abo"
+                to="/abo"
               >
                 Anderes Abo lösen
               </v-btn>

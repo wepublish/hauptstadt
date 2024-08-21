@@ -266,7 +266,7 @@ export default Vue.extend({
         const hasAccess = this.$store.getters['auth/hasAccess']
         return hasAccess ? baseUrl : `${baseUrl}?articleId=${teaser.wepPublication?.id}`
       } else if (teaser.__typename === 'PageTeaser') {
-        return `/p/${teaser?.wepPublication?.slug}`
+        return `/${teaser?.wepPublication?.slug}`
       }
     },
     isPeer (teaser: Teaser): boolean {

@@ -14,7 +14,7 @@
     >
       <nuxt-link
         class="black--text font-size-16 font-size-md-21 font-size-lg-23 font-size-xl-36"
-        to="/p/archiv"
+        to="/archiv"
       >
         Zu früheren Artikeln
       </nuxt-link>

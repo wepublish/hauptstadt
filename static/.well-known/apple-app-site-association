@@ -3,7 +3,7 @@
     "details": [
       {
         "appID": "68X2T4YTGN.be.hauptstadt.ios",
-        "paths": ["NOT /p/abo", "NOT /login/*invoiceId*", "/*"]
+        "paths": ["NOT /abo", "NOT /login/*invoiceId*", "/*"]
       }
     ]
   }

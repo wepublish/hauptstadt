@@ -107,7 +107,7 @@ export default class WepPublication {
     const title = this.socialMediaTitle || this?.title || ''
     const lead = this.socialMediaDescription || description || ''
     const keywords = (this.tags?.tags || []).map(tag => tag.tag).join(', ')
-    const url = `${baseUrl}/a/${this?.slug}`
+    const url = `${baseUrl}/${this?.slug}`
     let fallbackImageUrl
     try {
       fallbackImageUrl = `${baseUrl}${fallBackImageUrlPath}`

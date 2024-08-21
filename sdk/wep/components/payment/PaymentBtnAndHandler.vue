@@ -314,7 +314,7 @@ export default Vue.extend({
         this.pay()
       } else if (this.mode === 'extendSubscription') {
         if (this.isTrialSubscription) {
-          this.$router.push('/p/abo')
+          this.$router.push('/abo')
         } else {
           // open confirm dialog
           this.extendDialog = true

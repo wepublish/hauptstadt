@@ -163,7 +163,7 @@ export default Vue.extend({
   data () {
     return {
       PATH_IN_READ_MODE: ['/page', '/article', '/peer'],
-      PATH_HIDES_PAYWALL: ['/p/login', '/p/abo', '/p/probe-abo', '/p/profile', '/p/deactivated-abos', '/p/abo-details', '/p/open-invoice'],
+      PATH_HIDES_PAYWALL: ['/login', '/abo', '/probe-abo', '/profile', '/deactivated-abos', '/abo-details', '/open-invoice'],
       hiddenByOtherPaywall: false,
       windowHeight: null as number | null,
       headerOut: false as boolean,

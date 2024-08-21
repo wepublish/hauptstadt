@@ -12,7 +12,7 @@ export default class PageNavigationLink extends NavigationLink implements IFront
   }
 
   public getFrontendLink(): string {
-    return `/p/${this.page?.slug}`
+    return `/${this.page?.slug}`
   }
 
   /**

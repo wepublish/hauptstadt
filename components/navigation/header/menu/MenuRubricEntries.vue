@@ -75,7 +75,7 @@ export default Vue.extend({
       if (activeElement) {
         activeElement.blur()
       }
-      const link = `/p/search?query=${this.searchQuery}`
+      const link = `/search?query=${this.searchQuery}`
       this.searchQuery = ''
       await this.$router.push(link)
       this.$store.commit('navigation/closeMenu')
