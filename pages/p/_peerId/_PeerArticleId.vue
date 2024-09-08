@@ -60,16 +60,16 @@ export default Vue.extend({
     },
     async loadPeerArticle (reduced: boolean = false): Promise<undefined | Article> {
       const peerArticleId = this.$route.params.PeerArticleId
-      const peerSlug: string = this.$route.params.peerSlug
-      const response = await new PeerArticleService({ vue: this }).getPeerArticle({ peerArticleId, peerSlug, reduced })
+      const peerId: string = this.$route.params.peerId
+      const response = await new PeerArticleService({ vue: this }).getPeerArticle({ peerArticleId, peerId, reduced })
       if (!response) {
         return undefined
       }
       return response
     },
     async loadPeer (): Promise<undefined | Peer> {
-      const slug: string = this.$route.params.peerSlug
-      const peer = await new PeerService({ vue: this }).getPeer({ slug })
+      const id: string = this.$route.params.peerId
+      const peer = await new PeerService({ vue: this }).getPeer({ id })
       if (!peer) { return undefined }
       return peer
     }

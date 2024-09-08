@@ -11,10 +11,6 @@ const extendRoutes: NuxtRouteConfig[] = [
     redirect: '/:pageSlug'
   },
   {
-    path: '/p/:pageId/:pageSlug',
-    redirect: '/:pageSlug'
-  },
-  {
     path: '/l/etikette',
     redirect: '/unsere-etikette'
   },

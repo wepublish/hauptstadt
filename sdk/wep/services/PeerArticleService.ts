@@ -20,10 +20,12 @@ export default class PeerArticleService extends Service {
   async getPeerArticle({
     peerArticleId,
     peerSlug,
+    peerId,
     reduced
   }: {
     peerArticleId: string
-    peerSlug: string
+    peerSlug?: string
+    peerId?: string
     reduced?: boolean
   }): Promise<Article | false> {
     if (!peerArticleId) {
@@ -31,9 +33,9 @@ export default class PeerArticleService extends Service {
         'peerArticleId is not provided on getPeerArticle() method within PeerArticle class.'
       )
     }
-    if (!peerSlug) {
+    if (!peerSlug && !peerId) {
       throw new Error(
-        'peerSlug is not provided on getPeerArticle() method within PeerArticle class.'
+        'peerSlug nor peerArticleID is not provided on getPeerArticle() method within PeerArticle class.'
       )
     }
     this.vue.$nextTick(() => {
@@ -43,8 +45,8 @@ export default class PeerArticleService extends Service {
       let query
       if (reduced) {
         query = gql`
-          query PeerArticle($peerArticleId: ID!, $peerSlug: Slug) {
-            peerArticle(id: $peerArticleId, peerSlug: $peerSlug) {
+          query PeerArticle($peerArticleId: ID!, $peerSlug: Slug, $peerId: ID) {
+            peerArticle(id: $peerArticleId, peerSlug: $peerSlug, peerID: $peerId) {
               ...reducedArticle
             }
           }
@@ -52,8 +54,8 @@ export default class PeerArticleService extends Service {
         `
       } else {
         query = gql`
-          query PeerArticle($peerArticleId: ID!, $peerSlug: Slug) {
-            peerArticle(id: $peerArticleId, peerSlug: $peerSlug) {
+          query PeerArticle($peerArticleId: ID!, $peerSlug: Slug, $peerId: ID) {
+            peerArticle(id: $peerArticleId, peerSlug: $peerSlug, peerID: $peerId) {
               ...article
             }
           }
@@ -68,7 +70,8 @@ export default class PeerArticleService extends Service {
         query,
         variables: {
           peerArticleId,
-          peerSlug
+          peerSlug,
+          peerId
         },
         errorPolicy: 'all',
         fetchPolicy
