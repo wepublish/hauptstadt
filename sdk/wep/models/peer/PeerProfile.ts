@@ -45,6 +45,9 @@ export default class PeerProfile {
       logo {
         ...image
       }
+      callToActionImage {
+          ...image
+      }
     }
   `
 

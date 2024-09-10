@@ -63,7 +63,7 @@
                 </v-img>
                 <!-- peering image overlay -->
                 <PeeringImgOverlay
-                  v-if="teaser.peer && teaser.peer.profile"
+                  v-if="teaser?.peer?.profile"
                   :peer="teaser.peer"
                   :max-width="$vuetify.breakpoint.xsOnly && isMultiBlock && isLightStyle(teaser) ? '23%' : '13%'"
                   :class="{
