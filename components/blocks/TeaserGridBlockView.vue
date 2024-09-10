@@ -259,7 +259,7 @@ export default Vue.extend({
       const peerSlug = this.$route.params.peerSlug
       if (peerSlug || teaser.__typename === 'PeerArticleTeaser') {
         const peerArticleTeaser = teaser as unknown as PeerArticleTeaser
-        return `/peer/${peerArticleTeaser?.peer?.slug || peerSlug}/${teaser?.wepPublication?.id}`
+        return `/p/${peerArticleTeaser?.peer?.id || peerSlug}/${teaser?.wepPublication?.id}`
       } else if (teaser.__typename === 'ArticleTeaser') {
         // article id is for paywall purposes. see WepPublication.vue
         const baseUrl = `/a/${teaser?.wepPublication?.slug}`

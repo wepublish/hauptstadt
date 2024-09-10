@@ -162,7 +162,7 @@ export default Vue.extend({
   components: { InvoiceHintHeader, PaywallContent, BoxedContent },
   data () {
     return {
-      PATH_IN_READ_MODE: ['/page', '/article', '/peer'],
+      PATH_IN_READ_MODE: ['/a', '/p'],
       PATH_HIDES_PAYWALL: ['/login', '/abo', '/probe-abo', '/profile', '/deactivated-abos', '/abo-details', '/open-invoice'],
       hiddenByOtherPaywall: false,
       windowHeight: null as number | null,
