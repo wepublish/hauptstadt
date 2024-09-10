@@ -3,7 +3,7 @@
     class="justify-end no-gutters peering-image-container w-100"
   >
     <v-img
-      :src="peer.profile.logo.xsUrl"
+      :src="peer.profile?.callToActionImage?.xsUrl"
       aspect-ratio="1"
       :max-width="maxWidth"
       class="border-radius-50"

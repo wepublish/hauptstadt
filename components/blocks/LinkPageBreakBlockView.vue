@@ -46,7 +46,7 @@
               </v-col>
               <v-col class="col-auto">
                 <v-img
-                  :src="peer.profile.logo.xsUrl"
+                  :src="peer.profile?.callToActionImage?.xsUrl"
                   aspect-ratio="1"
                   width="44px"
                   class="border-radius-50"
