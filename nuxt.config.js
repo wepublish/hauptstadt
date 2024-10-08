@@ -126,15 +126,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/apollo',
     '@nuxtjs/sentry',
-    [
-      'nuxt-matomo',
-      {
-        matomoUrl: 'https://t.seccom.ch/',
-        siteId: 8,
-        trackerUrl: 'https://t.seccom.ch/seccomtp',
-        scriptUrl: 'https://t.seccom.ch/seccomtj'
-      }
-    ],
     'cookie-universal-nuxt'
   ],
 
