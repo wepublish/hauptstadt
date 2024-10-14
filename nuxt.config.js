@@ -8,6 +8,25 @@ export default {
     htmlAttrs: {
       lang: 'de'
     },
+    script: [
+      {
+        hid: "gtag-script",
+        src: "https://www.googletagmanager.com/gtag/js?id=G-44TZTJNQ6H",
+        async: true,
+      }, {
+        hid: "gtag-init",
+        innerHTML: `window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-44TZTJNQ6H');`,
+        type: "text/javascript",
+        charset: "utf-8"
+      },
+      
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      'gtag-init': ['innerHTML']
+    },
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
@@ -126,15 +145,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/apollo',
     '@nuxtjs/sentry',
-    [
-      'nuxt-matomo',
-      {
-        matomoUrl: 'https://t.seccom.ch/',
-        siteId: 8,
-        trackerUrl: 'https://t.seccom.ch/seccomtp',
-        scriptUrl: 'https://t.seccom.ch/seccomtj'
-      }
-    ],
     'cookie-universal-nuxt'
   ],
 
