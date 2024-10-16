@@ -15,9 +15,9 @@ export default class Teaser {
   public wepPublication?: ReducedWepPublicationTypes
 
   public static styles = {
-    default: 'DEFAULT',
-    text: 'TEXT',
-    light: 'LIGHT'
+    default: 'default',
+    text: 'text',
+    light: 'light'
   }
 
   constructor({

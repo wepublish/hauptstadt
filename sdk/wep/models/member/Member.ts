@@ -5,7 +5,6 @@ export interface MemberProps {
   id?: string
   name?: string
   firstName?: string
-  preferredName?: string
   address?: Address
   email?: string
 }
@@ -13,8 +12,8 @@ export interface MemberProps {
 export default class Member extends User {
   public emailRepeat: string | undefined
 
-  constructor({id, name, firstName, preferredName, address, email}: MemberProps) {
-    super({id, name, firstName, preferredName, address, email})
+  constructor({id, name, firstName, address, email}: MemberProps) {
+    super({id, name, firstName, address, email})
     this.emailRepeat = undefined
   }
 
