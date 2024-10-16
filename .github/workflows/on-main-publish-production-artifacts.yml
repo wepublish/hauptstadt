@@ -1,9 +1,9 @@
 name: Publish production docker image
 
 on:
-  create:
+  push:
     tags:
-      - '*'  
+      - 'v*'
 
 jobs:
   date_sha_tag:
