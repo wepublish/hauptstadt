@@ -47,7 +47,6 @@ export class AuthStore extends VuexModule {
   setMePartially({
     name,
     firstName,
-    preferredName,
     streetAddress,
     zipCode,
     city,
@@ -56,7 +55,6 @@ export class AuthStore extends VuexModule {
   }: {
     name?: string
     firstName?: string
-    preferredName?: string
     streetAddress?: string
     zipCode?: string
     city?: string
@@ -71,9 +69,6 @@ export class AuthStore extends VuexModule {
     }
     if (firstName) {
       this.me.firstName = firstName
-    }
-    if (preferredName) {
-      this.me.preferredName = preferredName
     }
     if (streetAddress) {
       this.me.address.streetAddress = streetAddress

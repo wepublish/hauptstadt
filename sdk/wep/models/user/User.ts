@@ -13,7 +13,6 @@ export interface UserProps {
   name?: string
   firstName?: string
   email?: string
-  preferredName?: string
   address?: Address
   flair?: string
   subscriptions?: Subscriptions
@@ -27,7 +26,6 @@ export default class User {
   public firstName?: string
   public name?: string
   public email?: string
-  public preferredName?: string
   public address?: Address
   public flair?: string
   public subscriptions?: Subscriptions
@@ -40,7 +38,6 @@ export default class User {
     name,
     firstName,
     email,
-    preferredName,
     address,
     flair,
     subscriptions,
@@ -52,7 +49,6 @@ export default class User {
     this.name = name
     this.firstName = firstName
     this.email = email
-    this.preferredName = preferredName
     this.address = address ? new Address(address) : new Address({})
     this.flair = flair
     this.subscriptions = subscriptions
@@ -124,7 +120,6 @@ export default class User {
       name
       firstName
       email
-      preferredName
       address {
         ...address
       }

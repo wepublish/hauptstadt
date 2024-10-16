@@ -175,8 +175,8 @@ export default Vue.extend({
           skip,
           filter,
           reduced: true,
-          sort: 'PUBLISHED_AT',
-          order: order || 'DESCENDING'
+          sort: 'publishedAt',
+          order: order || 'Descending'
         })
       }
 

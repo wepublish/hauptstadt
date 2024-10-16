@@ -34,7 +34,6 @@ export default class MemberService extends Service {
           $email: String!
           $challengeAnswer: ChallengeInput!
           $firstName: String
-          $preferredName: String
           $address: UserAddressInput
           $password: String
         ) {
@@ -43,7 +42,6 @@ export default class MemberService extends Service {
             email: $email
             challengeAnswer: $challengeAnswer
             firstName: $firstName
-            preferredName: $preferredName
             address: $address
             password: $password
           ) {
@@ -126,7 +124,6 @@ export default class MemberService extends Service {
           $paymentPeriodicity: PaymentPeriodicity!
           $monthlyAmount: Int!
           $paymentMethodId: ID!
-          $preferredName: String
           $address: UserAddressInput
           $successURL: String
           $failureURL: String
@@ -141,7 +138,6 @@ export default class MemberService extends Service {
             paymentPeriodicity: $paymentPeriodicity
             monthlyAmount: $monthlyAmount
             paymentMethodID: $paymentMethodId
-            preferredName: $preferredName
             address: $address
             successURL: $successURL
             failureURL: $failureURL

@@ -105,7 +105,7 @@ export default class WepImage {
    *  GQL FRAGMENTS
    */
   public static focalPointFragment = gql`
-    fragment focalPoint on Point {
+    fragment focalPoint on FocalPoint {
       x
       y
     }

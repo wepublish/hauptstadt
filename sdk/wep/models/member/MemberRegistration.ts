@@ -7,7 +7,6 @@ export interface MemberRegistrationProps {
   id?: string
   name?: string
   firstName?: string
-  preferredName?: string
   address?: Address
   email?: string
   memberPlanId?: string
@@ -41,7 +40,6 @@ export default class MemberRegistration extends Member {
     id,
     name,
     firstName,
-    preferredName,
     address,
     email,
     memberPlanId,
@@ -55,7 +53,7 @@ export default class MemberRegistration extends Member {
     password,
     deactivateSubscriptionId
   }: MemberRegistrationProps) {
-    super({id, name, firstName, preferredName, address, email})
+    super({id, name, firstName, address, email})
     this.memberPlanId = memberPlanId
     this.autoRenew = autoRenew
     this.paymentPeriodicity = paymentPeriodicity
