@@ -101,14 +101,14 @@ import { VForm } from '~/sdk/wep/interfacesAndTypes/Vuetify'
 import CommentService from '~/sdk/wep/services/CommentService'
 import Slate, { SlateNode } from '~/sdk/wep/classes/Slate'
 import User from '~/sdk/wep/models/user/User'
-import { WepPublicationTypeName } from '~/sdk/wep/interfacesAndTypes/WePublish'
+import { CommentItemType } from '~/sdk/wep/interfacesAndTypes/WePublish'
 
 export default Vue.extend({
   name: 'EditOrCreateComment',
   components: { LoginForm },
   props: {
     publicationType: {
-      type: String as PropType<WepPublicationTypeName | undefined>,
+      type: String as PropType<CommentItemType | undefined>,
       required: false,
       default: undefined
     },

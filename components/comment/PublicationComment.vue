@@ -143,7 +143,7 @@ import Comment from '~/sdk/wep/models/comment/Comment'
 import Slate from '~/sdk/wep/classes/Slate'
 import EditOrCreateComment from '~/components/comment/EditOrCreateComment.vue'
 import User from '~/sdk/wep/models/user/User'
-import { WepPublicationTypeName } from '~/sdk/wep/interfacesAndTypes/WePublish'
+import { CommentItemType } from '~/sdk/wep/interfacesAndTypes/WePublish'
 
 export default Vue.extend({
   name: 'PublicationComment',
@@ -161,7 +161,7 @@ export default Vue.extend({
       required: true
     },
     publicationType: {
-      type: String as PropType<WepPublicationTypeName>,
+      type: String as PropType<CommentItemType>,
       required: true
     },
     publicationId: {

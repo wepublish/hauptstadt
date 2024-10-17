@@ -4,7 +4,7 @@ import Service from '~/sdk/wep/services/Service'
 import Comment from '~/sdk/wep/models/comment/Comment'
 import {SlateNode} from '~/sdk/wep/classes/Slate'
 import ChallengeAnswer from '~/sdk/wep/models/challenge/ChallengeAnswer'
-import {WepPublicationTypeName} from '~/sdk/wep/interfacesAndTypes/WePublish'
+import {CommentItemType} from '~/sdk/wep/interfacesAndTypes/WePublish'
 
 export default class CommentService extends Service {
   constructor({vue}: {vue: Vue}) {
@@ -32,7 +32,7 @@ export default class CommentService extends Service {
   }: {
     parentID?: string
     itemID: string
-    itemType: WepPublicationTypeName
+    itemType: CommentItemType
     title?: string
     text: SlateNode[]
     guestUsername?: string

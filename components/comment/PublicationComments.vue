@@ -61,7 +61,7 @@ import Comments from '~/sdk/wep/models/comment/Comments'
 import EditOrCreateComment from '~/components/comment/EditOrCreateComment.vue'
 import Comment from '~/sdk/wep/models/comment/Comment'
 import PublicationComment from '~/components/comment/PublicationComment.vue'
-import { WepPublicationTypeName } from '~/sdk/wep/interfacesAndTypes/WePublish'
+import { CommentItemType } from '~/sdk/wep/interfacesAndTypes/WePublish'
 
 export default Vue.extend({
   name: 'PublicationComments',
@@ -72,7 +72,7 @@ export default Vue.extend({
       required: true
     },
     publicationType: {
-      type: String as PropType<WepPublicationTypeName>,
+      type: String as PropType<CommentItemType>,
       required: true
     },
     publicationId: {

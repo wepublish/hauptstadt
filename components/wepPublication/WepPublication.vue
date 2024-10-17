@@ -178,7 +178,7 @@
         :comment-depth="0"
         :comments="publication.comments"
         :publication-id="publication.id"
-        publication-type="Article"
+        publication-type="article"
         class="max-width-580"
       />
     </v-col>
