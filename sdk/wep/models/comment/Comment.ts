@@ -8,7 +8,7 @@ import Tags from '~/sdk/wep/models/tags/Tags'
 import Tag from '~/sdk/wep/models/tags/Tag'
 import CalculatedRating from '~/sdk/wep/models/comment/CalculatedRating'
 import WepImage from '~/sdk/wep/models/image/WepImage'
-import {WepPublicationTypeName} from '~/sdk/wep/interfacesAndTypes/WePublish'
+import {CommentItemType} from '../../interfacesAndTypes/WePublish'
 export type CommentAuthorType = 'Author' | 'Team' | 'VerifiedUser'
 export type RejectReason = 'spam' | 'misconduct'
 export type CommentState = 'approved' | 'pendingApproval' | 'pendingUserChanges' | 'rejected'
@@ -23,7 +23,7 @@ export interface CommentProps {
   tags?: Tags
   authorType: CommentAuthorType
   itemID: string
-  itemType: WepPublicationTypeName
+  itemType: CommentItemType
   children?: Comments
   title?: string
   lead?: string
@@ -45,7 +45,7 @@ export default class Comment {
   public tags?: Tags
   public authorType: CommentAuthorType
   public itemID: string
-  public itemType: WepPublicationTypeName
+  public itemType: CommentItemType
   public children?: Comments
   public title?: string
   public lead?: string

@@ -20,3 +20,4 @@ export interface ArticleFilter {
 
 export type WepPublicationType = Article | Page
 export type WepPublicationTypeName = 'Article' | 'Page'
+export type CommentItemType = 'article' | 'peerArticle' | 'page'
