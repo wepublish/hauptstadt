@@ -13,10 +13,15 @@ import TeaserGridBlockView from '~/components/blocks/TeaserGridBlockView.vue'
 import Slate from '~/sdk/wep/classes/Slate'
 import RichTextBlock from '~/sdk/wep/models/block/RichTextBlock'
 import ImgDescription from '~/components/img/ImgDescription.vue'
+import CreateMemberPlanView from '~/sdk/wep/components/memberPlan/CreateMemberPlanView.vue'
+import {PropertyValue} from '~/sdk/wep/models/properties/Property'
+import HtmlBlockView from '~/components/blocks/HtmlBlockView.vue'
 
 export default defineComponent({
   name: 'jetzt',
-  components: {ImgDescription, TeaserGridBlockView, TitleBlockView, HImage, BlocksView},
+  components: {
+    HtmlBlockView,
+    CreateMemberPlanView, ImgDescription, TeaserGridBlockView, TitleBlockView, HImage, BlocksView},
   data () {
     return {
       seoPage: undefined as undefined | Page,
@@ -63,6 +68,10 @@ export default defineComponent({
     },
     logo (): ImageBlock | undefined {
       return this.blocks?.getFirstBlockByType('ImageBlock')
+    },
+    memberPlanTags (): undefined | PropertyValue[] {
+      const memberPlanTag = this.page?.properties?.findPropertyByKey('member-plan-tag')?.value
+      return memberPlanTag ? [memberPlanTag] : undefined
     }
   },
   methods: {
@@ -81,10 +90,18 @@ export default defineComponent({
 <template>
   <v-row class="mb-12 pb-12">
     
+    <!-- login ? -->
+    <v-col class="col-12 text-right">
+      <v-btn nuxt href="/login" outlined>
+        Einloggen
+      </v-btn>
+      <p class="pt-2">Du hast bereits ein Abo?</p>
+    </v-col>
+    
     <!-- iterate blocks -->
     <v-col
       v-if="blocks?.blocks.length"
-      class="pt-24"
+      class="pt-md-12"
     >
       <v-row
         v-for="(block, blockIndex) in blocks?.blocks || []"
@@ -115,41 +132,51 @@ export default defineComponent({
         <!-- title -->
         <v-col
           v-if="block.__typename === 'TitleBlock'"
-          class="col-12 col-md-10 text-center pt-12"
+          class="col-12 col-md-10 text-center"
         >
           <title-block-view :title-block="block" />
           
           <!-- member plan form -->
-          
+          <v-row
+            v-if="block.blockStyle === 'member-plan-form'"
+            class="justify-center"
+            id="abo"
+          >
+            <v-col class="max-width-840">
+              <create-member-plan-view
+                :member-plan-tags="memberPlanTags"
+              />
+            </v-col>
+          </v-row>
         </v-col>
         
         <!-- button -->
         <v-col
           v-if="block.__typename === 'LinkPageBreakBlock'"
-          class="text-center pt-24"
+          class="text-center"
         >
           <v-btn
             :href="block.linkURL"
             color="primary"
             x-large
-            height="80"
-            width="240"
+            min-height="90"
+            min-width="380"
           >
-            {{block.linkText}}
+            <h1 class="title-24">{{block.linkText}}</h1>
           </v-btn>
         </v-col>
         
         <!-- article teaser -->
         <v-col
           v-if="block.__typename === 'TeaserGridBlock'"
-          class="col-12 mt-6 pt-24"
+          class="col-12 mt-6"
         >
           <teaser-grid-block-view
             :teaser-grid-block="block"
           />
         </v-col>
         
-        <!-- richtext -->
+        <!-- rich text -->
         <v-col
           v-if="block.__typename === 'RichTextBlock'"
           class="line-height-1-6"
@@ -159,6 +186,13 @@ export default defineComponent({
             :class="block.blockStyle === 'col-4' ? 'rich-text-columns' : ''"
             v-html="slateToHtml(block)"
           />
+        </v-col>
+        
+        <!-- html block / spacer -->
+        <v-col
+          v-if="block.__typename === 'HTMLBlock'"
+        >
+          <html-block-view :html-block="block" />
         </v-col>
       </v-row>
     </v-col>
@@ -192,13 +226,5 @@ export default defineComponent({
     column-count: 3;
     column-gap: calc(32 * 4px);
   }
-}
-
-.max-width-200 {
-  max-width: 600px;
-}
-
-.pt-24 {
-  padding-top: calc(24 * 4px);
 }
 </style>
