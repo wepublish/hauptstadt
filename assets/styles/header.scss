@@ -1,0 +1,241 @@
+@import 'assets/styles/variables';
+@import 'node_modules/vuetify/src/styles/settings/variables';
+
+$logo-width: 220px;
+$logo-width-dense: 220px;
+$logo-width-sm-and-up: 350px;
+$logo-width-md-and-up: 440px;
+$logo-width-lg-and-up: 550px;
+$logo-width-xl-only: 700px;
+$logo-width-dense-md-and-up: 330px;
+
+.fixed-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.header-out {
+  top: -#{$header-height};
+  transition: top 0.8s ease 0s;
+}
+
+.header-in {
+  top: 0px;
+  transition: top 0.8s ease 0s;
+}
+
+.header-height {
+  height: $header-height;
+}
+
+.header-height-dense {
+  transition: height 500ms ease;
+  height: $header-height-dense;
+  animation-name: header-height-dense-animation;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
+}
+
+@keyframes header-height-dense-animation {
+  from {
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%);
+  }
+  to {
+    clip-path: polygon(0% 0%, 0% 100%, 100% 50%, 100% 0%);
+  }
+}
+
+.logo-width {
+  width: $logo-width;
+  transition: width 0.5s ease;
+}
+
+.logo-width-dense {
+  width: $logo-width-dense;
+  transition: width 0.5s ease;
+}
+
+/*
+  PRIMARY LINE
+ */
+.line-container {
+  width: 100%;
+  box-shadow: 0px 7px 10px -3px rgb(0 0 0 / 18%);
+  transform: rotate(-3.0deg);
+}
+
+/*
+  CLAIM
+ */
+@keyframes claim-animation {
+  from {
+    width: 0px;
+  }
+  to {
+    width: $logo-width;
+  }
+}
+
+.claim-enter-active {
+  animation: claim-animation 500ms forwards;
+}
+.claim-leave-active {
+  animation: claim-animation 500ms reverse forwards;
+}
+
+.claim-width{
+  width: $logo-width;
+}
+
+@media #{map-get($display-breakpoints, 'sm-and-up')} {
+  .header-height {
+    height: $header-height-sm-and-up;
+  }
+
+  .logo-width {
+    width: $logo-width-sm-and-up;
+    min-height: 40.58px;
+  }
+
+  .header-out {
+    top: -#{$header-height-sm-and-up};
+    transition: top 0.8s ease 0s;
+  }
+
+  .line-container {
+    transform: rotate(-1.7deg);
+  }
+
+  @keyframes claim-animation {
+    from {
+      width: 0px;
+    }
+    to {
+      width: $logo-width-sm-and-up;
+    }
+  }
+  .claim-width{
+    width: $logo-width-sm-and-up;
+    min-height: 14.23px;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .fixed-header {
+    left: unset;
+  }
+
+  .header-height {
+    height: $header-height-md-and-up;
+  }
+
+  .header-height-dense {
+    height: $header-height-dense-md-and-up;
+  }
+
+  .header-out {
+    top: -#{$header-height-md-and-up};
+    transition: top 0.8s ease 0s;
+  }
+
+  .logo-width {
+    width: $logo-width-md-and-up;
+    min-height: 51.01px;
+  }
+
+  .logo-width-dense {
+    width: $logo-width-dense-md-and-up;
+  }
+
+  .line-container {
+    transform: rotate(-2deg);
+  }
+
+  /*
+  CLAIM
+ */
+  @keyframes claim-animation {
+    from {
+      width: 0px;
+    }
+    to {
+      width: $logo-width-md-and-up;
+    }
+  }
+  .claim-width{
+    width: $logo-width-md-and-up;
+    min-height: 17.9px;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'lg-and-up')} {
+
+  .header-height {
+    height: $header-height-lg-and-up;
+  }
+
+  .logo-width {
+    width: $logo-width-lg-and-up;
+    min-height: 63.77px;
+  }
+
+  .header-out {
+    top: -#{$header-height-lg-and-up};
+    transition: top 0.8s ease 0s;
+  }
+
+  .line-container {
+    transform: rotate(-1.7deg);
+  }
+
+  /*
+  CLAIM
+ */
+  @keyframes claim-animation {
+    from {
+      width: 0px;
+    }
+    to {
+      width: $logo-width-lg-and-up;
+    }
+  }
+  .claim-width{
+    width: $logo-width-lg-and-up;
+    min-height: 22.37px;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'xl-only')} {
+  .logo-width {
+    width: $logo-width-xl-only;
+    min-height: 81.16px;
+  }
+
+  .header-height {
+    height: $header-height-xl-only;
+  }
+
+  .header-out {
+    top: -#{$header-height-xl-only};
+    transition: top 0.8s ease 0s;
+  }
+
+  .line-container {
+    transform: rotate(-1.3deg);
+  }
+
+  @keyframes claim-animation {
+    from {
+      width: 0px;
+    }
+    to {
+      width: $logo-width-xl-only;
+    }
+  }
+  .claim-width{
+    width: $logo-width-xl-only;
+    min-height: 28.47px;
+  }
+}

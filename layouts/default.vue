@@ -17,6 +17,7 @@
         />
         <!-- header ml-sm-n3 is a fix for shifted scroll bar width -->
         <h-header
+          v-if="!hideHeader"
           class="z-index-5"
         />
         <v-row
@@ -26,6 +27,7 @@
             <!-- content -->
             <Nuxt
               class="nuxt-content white"
+              :style="hideHeader ? 'margin-top: 0px;' : ''"
             />
           </boxed-content>
         </v-row>
@@ -83,6 +85,10 @@ export default Vue.extend({
     },
     password (): string | undefined {
       return this.$nuxt.context.$config.OVERLAY_PASSWORD
+    },
+    hideHeader (): boolean {
+      // hide header on special landing page
+      return this.$route.path === '/jetzt'
     }
   },
   async mounted () {
