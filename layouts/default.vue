@@ -7,7 +7,12 @@
       @hide="hideOverlay()"
     />
     <!-- ml-md-n3 is to avoid scroll bar with is calculated to the view-port -->
-    <v-main class="min-h-100-vh">
+    <v-main
+      class="min-h-100-vh"
+      :class="{
+        'bg-gradient': $route.path === '/lesen'
+      }"
+    >
       <v-container
         fluid
       >
@@ -88,7 +93,7 @@ export default Vue.extend({
     },
     hideHeader (): boolean {
       // hide header on special landing page
-      return this.$route.path === '/jetzt'
+      return this.$route.path === '/lesen'
     }
   },
   async mounted () {
@@ -120,6 +125,11 @@ export default Vue.extend({
       })
       // init the paywalls after login
       await this.$store.dispatch('paywall/initPaywalls', { $config: this.$config })
+      
+      // redirect to landing page, if not logged-in
+      if (!this.$store.getters['auth/loggedIn']) {
+        await this.$router.push('/lesen')
+      }
     },
     hideOverlay () {
       this.overlay = false

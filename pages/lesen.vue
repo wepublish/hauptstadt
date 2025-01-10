@@ -18,7 +18,7 @@ import {PropertyValue} from '~/sdk/wep/models/properties/Property'
 import HtmlBlockView from '~/components/blocks/HtmlBlockView.vue'
 
 export default defineComponent({
-  name: 'jetzt',
+  name: 'lesen',
   components: {
     HtmlBlockView,
     CreateMemberPlanView, ImgDescription, TeaserGridBlockView, TitleBlockView, HImage, BlocksView},
@@ -26,7 +26,7 @@ export default defineComponent({
     return {
       seoPage: undefined as undefined | Page,
       page: undefined as undefined | Page,
-      PAGE_SLUG: 'jetzt',
+      PAGE_SLUG: 'lesen',
       Slate
     }
   },
@@ -92,10 +92,12 @@ export default defineComponent({
     
     <!-- login ? -->
     <v-col class="col-12 text-right">
-      <v-btn nuxt href="/login" outlined>
-        Einloggen
-      </v-btn>
-      <p class="pt-2">Du hast bereits ein Abo?</p>
+      <nuxt-link to="/login">
+        <v-btn outlined :small="$vuetify.breakpoint.smAndDown">
+          Einloggen
+        </v-btn>
+      </nuxt-link>
+      <p class="pt-1 pt-md-2 caption-12 caption-md-16">Du hast bereits ein Abo?</p>
     </v-col>
     
     <!-- iterate blocks -->
@@ -123,7 +125,7 @@ export default defineComponent({
             alt="Logo"
           >
           <img-description
-            v-if="block?.image"
+            v-if="block?.image && block?.caption"
             :image="block?.image"
             :caption="block?.caption"
           />
@@ -131,7 +133,7 @@ export default defineComponent({
         
         <!-- title -->
         <v-col
-          v-if="block.__typename === 'TitleBlock'"
+          v-else-if="block.__typename === 'TitleBlock'"
           class="col-12 col-md-10 text-center"
         >
           <title-block-view :title-block="block" />
@@ -139,10 +141,10 @@ export default defineComponent({
           <!-- member plan form -->
           <v-row
             v-if="block.blockStyle === 'member-plan-form'"
-            class="justify-center"
+            class="justify-center bg-gradient text-left"
             id="abo"
           >
-            <v-col class="max-width-840">
+            <v-col class="max-width-840 py-12">
               <create-member-plan-view
                 :member-plan-tags="memberPlanTags"
               />
@@ -152,15 +154,16 @@ export default defineComponent({
         
         <!-- button -->
         <v-col
-          v-if="block.__typename === 'LinkPageBreakBlock'"
+          v-else-if="block.__typename === 'LinkPageBreakBlock'"
           class="text-center"
         >
           <v-btn
             :href="block.linkURL"
-            color="primary"
+            class="elevation-0 white--text"
+            color="black"
             x-large
-            min-height="90"
-            min-width="380"
+            :min-height="$vuetify.breakpoint.mdAndUp ? 90 : 60"
+            :min-width="$vuetify.breakpoint.mdAndUp ? 380 : 240"
           >
             <h1 class="title-24">{{block.linkText}}</h1>
           </v-btn>
@@ -168,7 +171,7 @@ export default defineComponent({
         
         <!-- article teaser -->
         <v-col
-          v-if="block.__typename === 'TeaserGridBlock'"
+          v-else-if="block.__typename === 'TeaserGridBlock'"
           class="col-12 mt-6"
         >
           <teaser-grid-block-view
@@ -178,7 +181,7 @@ export default defineComponent({
         
         <!-- rich text -->
         <v-col
-          v-if="block.__typename === 'RichTextBlock'"
+          v-else-if="block.__typename === 'RichTextBlock'"
           class="line-height-1-6"
           :class="block.blockStyle === 'col-4' ? 'col-12' : 'col-12 col-sm-8 col-md-6'"
         >
@@ -190,7 +193,7 @@ export default defineComponent({
         
         <!-- html block / spacer -->
         <v-col
-          v-if="block.__typename === 'HTMLBlock'"
+          v-else-if="block.__typename === 'HTMLBlock'"
         >
           <html-block-view :html-block="block" />
         </v-col>
