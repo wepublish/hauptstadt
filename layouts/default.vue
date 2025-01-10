@@ -7,7 +7,12 @@
       @hide="hideOverlay()"
     />
     <!-- ml-md-n3 is to avoid scroll bar with is calculated to the view-port -->
-    <v-main class="min-h-100-vh">
+    <v-main
+      class="min-h-100-vh"
+      :class="{
+        'bg-gradient': $route.path === '/lesen'
+      }"
+    >
       <v-container
         fluid
       >
@@ -17,6 +22,7 @@
         />
         <!-- header ml-sm-n3 is a fix for shifted scroll bar width -->
         <h-header
+          v-if="!hideHeader"
           class="z-index-5"
         />
         <v-row
@@ -26,6 +32,7 @@
             <!-- content -->
             <Nuxt
               class="nuxt-content white"
+              :style="hideHeader ? 'margin-top: 0px;' : ''"
             />
           </boxed-content>
         </v-row>
@@ -83,6 +90,10 @@ export default Vue.extend({
     },
     password (): string | undefined {
       return this.$nuxt.context.$config.OVERLAY_PASSWORD
+    },
+    hideHeader (): boolean {
+      // hide header on special landing page
+      return this.$route.path === '/lesen'
     }
   },
   async mounted () {
@@ -114,6 +125,11 @@ export default Vue.extend({
       })
       // init the paywalls after login
       await this.$store.dispatch('paywall/initPaywalls', { $config: this.$config })
+      
+      // redirect to landing page, if not logged-in
+      if (!this.$store.getters['auth/loggedIn']) {
+        await this.$router.push('/lesen')
+      }
     },
     hideOverlay () {
       this.overlay = false

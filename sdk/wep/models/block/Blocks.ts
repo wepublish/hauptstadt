@@ -1,5 +1,5 @@
 import TeaserGridBlock from '~/sdk/wep/models/block/TeaserGridBlock'
-import Block from '~/sdk/wep/models/block/Block'
+import Block, {BlockTypename} from '~/sdk/wep/models/block/Block'
 import RichTextBlock from '~/sdk/wep/models/block/RichTextBlock'
 import ImageBlock from '~/sdk/wep/models/block/ImageBlock'
 import TitleBlock from '~/sdk/wep/models/block/TitleBlock'
@@ -108,6 +108,10 @@ export default class Blocks {
         block.hiddenByPaywall = true
       }
     })
+  }
+
+  public getFirstBlockByType (blockType: BlockTypename) {
+    return this.blocks.find(block => block.__typename === blockType)
   }
 
   public revealRemovedBlocks (): void {
