@@ -4,11 +4,11 @@ import {NuxtApp} from '@nuxt/types/app'
 import IAlert from '~/sdk/wep/models/alert/IAlert'
 
 export default class Service {
-  public vue: Vue
+  public vue: any | Vue
   public $nuxt: NuxtApp
   public $apollo: DollarApollo<any>
 
-  constructor({vue}: {vue: Vue}) {
+  constructor({vue}: {vue: any | Vue}) {
     if (!vue) {
       throw new Error('vue instance missing!')
     }

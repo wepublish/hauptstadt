@@ -7,7 +7,7 @@ import ReducedPage from '~/sdk/wep/models/wepPublication/page/ReducedPage'
 import {CacheIdentification} from '~/sdk/wep/store/cacheGuard'
 
 export default class PageService extends Service {
-  constructor({vue}: {vue: Vue}) {
+  constructor({vue}: {vue: any | Vue}) {
     super({vue})
   }
 
