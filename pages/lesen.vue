@@ -81,7 +81,7 @@ export default defineComponent({
     slateToHtml (block: RichTextBlock): string {
       const richText = block.richText
       if (!richText) return ''
-      return new Slate({fontClassParaphrase: 'column-break'}).toHtml(richText)
+      return new Slate({fontClassHeadings: ''}).toHtml(richText)
     }
   }
 })
