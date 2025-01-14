@@ -141,7 +141,7 @@ export default defineComponent({
           <!-- member plan form -->
           <v-row
             v-if="block.blockStyle === 'member-plan-form'"
-            class="justify-center bg-gradient text-left"
+            class="justify-center text-left"
             id="abo"
           >
             <v-col class="max-width-840 py-12">

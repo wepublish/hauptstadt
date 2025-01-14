@@ -127,7 +127,7 @@ export default Vue.extend({
       await this.$store.dispatch('paywall/initPaywalls', { $config: this.$config })
       
       // redirect to landing page, if not logged-in
-      if (!this.$store.getters['auth/loggedIn']) {
+      if (!this.$store.getters['auth/loggedIn'] && this.$route.name === 'index') {
         await this.$router.push('/lesen')
       }
     },
