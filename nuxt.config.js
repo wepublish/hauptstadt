@@ -83,7 +83,8 @@ export default {
       {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png'},
       {rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png'},
       {rel: 'manifest', href: '/site.webmanifest'},
-      {rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#000000'}
+      {rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#000000'},
+      {rel: 'stylesheet', href: '/fontawesome-all.min.css'}
     ]
   },
   publicRuntimeConfig: {
@@ -122,7 +123,6 @@ export default {
     '~/assets/styles/print.scss',
     '~/assets/styles/style.scss',
     '~/assets/styles/typography.scss',
-    './node_modules/@fortawesome/fontawesome-pro/css/all.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
