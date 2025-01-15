@@ -22,7 +22,7 @@ export default class Tags {
     return this
   }
 
-  public getTag (tag: string): Tag {
+  public getTag (tag: string): Tag | undefined {
     return this.tags.find(tmpTag => tmpTag.tag === tag)
   }
 }
