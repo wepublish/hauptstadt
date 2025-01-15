@@ -186,10 +186,11 @@ export default defineComponent({
         <!-- rich text -->
         <v-col
           v-else-if="block.__typename === 'RichTextBlock'"
-          class="line-height-1-6"
+          class="line-height-1-6 px-sm-3 px-sm-6 px-md-12"
           :class="block.blockStyle === 'col-4' ? 'col-12' : 'col-12 col-sm-8 col-md-6'"
         >
           <div
+            class="px-1"
             :class="block.blockStyle === 'col-4' ? 'rich-text-columns' : ''"
             v-html="slateToHtml(block)"
           />
