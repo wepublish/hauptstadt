@@ -140,7 +140,7 @@ export default defineComponent({
           v-else-if="block.__typename === 'TitleBlock'"
           class="col-12 col-md-10 text-center"
         >
-          <title-block-view :title-block="block" />
+          <title-block-view :title-block="block" tiempos />
           
           <!-- member plan form -->
           <v-row
