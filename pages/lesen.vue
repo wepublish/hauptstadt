@@ -16,10 +16,12 @@ import ImgDescription from '~/components/img/ImgDescription.vue'
 import CreateMemberPlanView from '~/sdk/wep/components/memberPlan/CreateMemberPlanView.vue'
 import {PropertyValue} from '~/sdk/wep/models/properties/Property'
 import HtmlBlockView from '~/components/blocks/HtmlBlockView.vue'
+import RichTextBlockView from '~/components/blocks/RichTextBlockView.vue'
 
 export default defineComponent({
   name: 'lesen',
   components: {
+    RichTextBlockView,
     HtmlBlockView,
     CreateMemberPlanView, ImgDescription, TeaserGridBlockView, TitleBlockView, HImage, BlocksView},
   data () {
@@ -91,19 +93,18 @@ export default defineComponent({
   <v-row class="mb-12 pb-12">
     
     <!-- login ? -->
-    <v-col class="col-12 text-right">
+    <v-col class="col-auto text-center primary" style="position: fixed; bottom: 8px; right: 12px; z-index: 99; border-radius: 4px;">
       <nuxt-link to="/login">
         <v-btn outlined :small="$vuetify.breakpoint.smAndDown">
           Einloggen
         </v-btn>
       </nuxt-link>
-      <p class="pt-1 pt-md-2 caption-12 caption-md-16">Du hast bereits ein Abo?</p>
+      <p class="pt-1 pt-md-2 caption-12 caption-md-16 mb-0">Du hast bereits ein Abo?</p>
     </v-col>
     
     <!-- iterate blocks -->
     <v-col
       v-if="blocks?.blocks.length"
-      class="pt-md-12"
     >
       <v-row
         v-for="(block, blockIndex) in blocks?.blocks || []"
@@ -113,19 +114,22 @@ export default defineComponent({
         <!-- image -->
         <v-col
           v-if="block.__typename === 'ImageBlock'"
-          class="col-12 text-center"
+          class="text-center logo-width"
           :class="{
-            'col-md-6': block.blockStyle === 'col-6',
-            'col-md-10': block.blockStyle === 'col-10'
+            'col-9 col-sm-6 col-md-5': block.blockStyle === 'col-6',
+            'col-12 col-md-10': block.blockStyle === 'col-10'
           }"
         >
-          <img
-            style="max-width: 100%;"
-            :src="block?.image?.url"
-            alt="Logo"
-          >
+          <nuxt-link to="/">
+            <img
+              style="max-width: 100%;"
+              :src="block?.image?.url"
+              alt="Logo"
+            >
+          </nuxt-link>
           <img-description
             v-if="block?.image && block?.caption"
+            class="text-left"
             :image="block?.image"
             :caption="block?.caption"
           />
@@ -159,8 +163,8 @@ export default defineComponent({
         >
           <v-btn
             :href="block.linkURL"
-            class="elevation-0 white--text"
-            color="black"
+            class="elevation-0 black--text"
+            color="primary"
             x-large
             :min-height="$vuetify.breakpoint.mdAndUp ? 90 : 60"
             :min-width="$vuetify.breakpoint.mdAndUp ? 380 : 240"

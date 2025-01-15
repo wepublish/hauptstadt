@@ -9,9 +9,6 @@
     <!-- ml-md-n3 is to avoid scroll bar with is calculated to the view-port -->
     <v-main
       class="min-h-100-vh"
-      :class="{
-        'bg-gradient': $route.path === '/lesen'
-      }"
     >
       <v-container
         fluid
