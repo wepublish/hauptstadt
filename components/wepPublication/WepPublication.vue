@@ -224,6 +224,8 @@ import UserInteractionOffline from '~/sdk/wep/components/helpers/UserInteraction
 import TextZoom from '~/components/helpers/TextZoom.vue'
 import { LoginBypass } from '~/sdk/wep/utils'
 
+const OPEN_PAYWALL_TAG_NAME = 'open-paywall'
+
 export default Vue.extend({
   name: 'WepPublication',
   components: {
@@ -307,6 +309,9 @@ export default Vue.extend({
     },
     loggedIn (): boolean {
       return this.$store.getters['auth/hasAccess']
+    },
+    isOpenPaywallPublication (): boolean {
+      return !!this.publication.tags?.getTag(OPEN_PAYWALL_TAG_NAME)
     }
   },
   watch: {
@@ -372,6 +377,9 @@ export default Vue.extend({
       this.imageBlock = this.getImageBlock()
     },
     paywallRulesGiven (): boolean {
+      if (this.isOpenPaywallPublication) {
+        return false
+      }
       if (this.peer) {
         return false
       }
@@ -490,7 +498,6 @@ export default Vue.extend({
         return undefined
       }
     },
-
     getTitleBlock () {
       if (!this.publication) {
         return false

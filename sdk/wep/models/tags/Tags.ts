@@ -21,4 +21,8 @@ export default class Tags {
     }
     return this
   }
+
+  public getTag (tag: string): Tag {
+    return this.tags.find(tmpTag => tmpTag.tag === tag)
+  }
 }
