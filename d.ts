@@ -1,0 +1,1 @@
+declare module '@gaviti/vue-turnstile';

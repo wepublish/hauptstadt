@@ -2,25 +2,13 @@
   <v-row>
     <!-- payment form -->
     <v-col class="col-12">
-      <v-form
-        v-if="!intentSecret"
-        ref="registrationFormRef"
-        @submit.prevent=""
-      >
+      <v-form v-if="!intentSecret" ref="registrationFormRef" @submit.prevent="">
         <!-- select amount you want to pay -->
         <!-- pr-1 workaround to not hide form borders -->
-        <v-row
-          v-if="settingsCorrect === true"
-          class="pr-1"
-        >
-          <v-col
-            v-if="memberPlan && !hidePaymentSlider"
-            class="col-12 pb-9 pt-16 pt-md-6"
-          >
+        <v-row v-if="settingsCorrect === true" class="pr-1">
+          <v-col v-if="memberPlan && !hidePaymentSlider" class="col-12 pb-9 pt-16 pt-md-6">
             <v-row>
-              <v-col
-                class="col-12 pt-0"
-              >
+              <v-col class="col-12 pt-0">
                 <slot name="selectAmountTitle" />
               </v-col>
             </v-row>
@@ -28,12 +16,9 @@
               <v-col class="pt-16 pt-md-6">
                 <v-card outlined>
                   <v-card-text>
-                    <payment-slider
-                      v-if="!intentSecret"
-                      ref="paymentSliderRef"
+                    <payment-slider v-if="!intentSecret" ref="paymentSliderRef"
                       :min-amount="memberPlan.amountPerMonthMin"
-                      :selected-amount-in-cent.sync="memberRegistration.monthlyAmount"
-                    >
+                      :selected-amount-in-cent.sync="memberRegistration.monthlyAmount">
                       <template #label>
                         <slot name="sliderLabel" />
                       </template>
@@ -45,150 +30,88 @@
           </v-col>
 
           <!-- user registration form -->
-          <v-col
-            v-if="!user"
-            class="col-12 pt-8 pb-0"
-          >
+          <v-col v-if="!user" class="col-12 pt-8 pb-0">
             <v-row>
-              <v-col
-                class="col-12 pb-6"
-              >
+              <v-col class="col-12 pb-6">
                 <slot name="addressTitle" />
               </v-col>
             </v-row>
-            <registration-form
-              :member-registration.sync="memberRegistration"
-              :registration-form-fields="registrationFormFields"
-            />
+            <registration-form :member-registration.sync="memberRegistration"
+              :registration-form-fields="registrationFormFields" />
           </v-col>
 
           <!-- payment method selection -->
-          <v-col
-            v-if="availablePaymentMethods && availablePaymentMethods.length && !hidePaymentMethods"
-            class="col-12 pt-8"
-          >
+          <v-col v-if="availablePaymentMethods && availablePaymentMethods.length && !hidePaymentMethods"
+            class="col-12 pt-8">
             <v-row class="justify-center justify-sm-start">
               <!-- no payment method icons -->
-              <v-col
-                v-if="!iconsOfPaymentProviders"
-                class="col-12 pb-0"
-              >
-                <v-alert
-                  color="primary"
-                  class="white--text text-center pt-4"
-                >
+              <v-col v-if="!iconsOfPaymentProviders" class="col-12 pb-0">
+                <v-alert color="primary" class="white--text text-center pt-4">
                   <span class="fal fa-exclamation-triangle mr-2" />
-                  Icons der Payment-Provider wurden nicht konfiguriert. Bitte wende dich an {{ $config.TECHNICAL_ISSUER_MAIL }}
+                  Icons der Payment-Provider wurden nicht konfiguriert. Bitte wende dich an {{
+                    $config.TECHNICAL_ISSUER_MAIL }}
                 </v-alert>
               </v-col>
 
-              <v-col
-                v-else
-                class="col-12"
-              >
+              <v-col v-else class="col-12">
                 <slot name="selectPaymentMethodTitle" />
               </v-col>
 
               <!-- auto renew payment possible -->
-              <v-col
-                v-for="(currentPaymentMethod, currentPaymentMethodId) in availablePaymentMethods"
-                :key="currentPaymentMethodId"
-                class="col-auto position-relative"
-              >
-                <v-btn
-                  outlined
-                  large
-                  height="70px"
+              <v-col v-for="(currentPaymentMethod, currentPaymentMethodId) in availablePaymentMethods"
+                :key="currentPaymentMethodId" class="col-auto position-relative">
+                <v-btn outlined large height="70px"
                   :set="currentPaymentProviderSlug = currentPaymentMethod.getPaymentMethods().getFirstPaymentMethod().slug"
                   :color="selectedPaymentProvider === currentPaymentProviderSlug ? 'primary ' : ''"
-                  @click="selectPaymentProvider(currentPaymentMethod.getPaymentMethods().getFirstPaymentMethod())"
-                >
+                  @click="selectPaymentProvider(currentPaymentMethod.getPaymentMethods().getFirstPaymentMethod())">
                   <!-- payment provider icons -->
-                  <payment-method-icons
-                    v-if="iconsOfPaymentProviders"
-                    :icons-of-payment-provider="iconsOfPaymentProviders.getPaymentProviderIconBySlug(currentPaymentProviderSlug)"
-                  />
+                  <payment-method-icons v-if="iconsOfPaymentProviders"
+                    :icons-of-payment-provider="iconsOfPaymentProviders.getPaymentProviderIconBySlug(currentPaymentProviderSlug)" />
                 </v-btn>
-                <span
-                  v-if="selectedPaymentProvider === currentPaymentProviderSlug"
-                  class="fa fa-check fa-2x green--text check-container mb-1 mr-n1"
-                />
+                <span v-if="selectedPaymentProvider === currentPaymentProviderSlug"
+                  class="fa fa-check fa-2x green--text check-container mb-1 mr-n1" />
               </v-col>
 
               <!-- auto renew checkbox -->
-              <v-col
-                v-if="selectedPaymentMethod && !selectedPaymentMethod.forceAutoRenewal"
-                class="col-auto"
-              >
-                <v-checkbox
-                  v-model="memberRegistration.autoRenew"
-                  color="black"
-                  label="Mit automatischer Abo-Erneuerung"
-                />
+              <v-col v-if="selectedPaymentMethod && !selectedPaymentMethod.forceAutoRenewal" class="col-auto">
+                <v-checkbox v-model="memberRegistration.autoRenew" color="black"
+                  label="Mit automatischer Abo-Erneuerung" />
               </v-col>
               <!-- force auto renew hint -->
-              <v-col
-                v-if="selectedPaymentMethod && selectedPaymentMethod.forceAutoRenewal"
-                class="v-col"
-              >
+              <v-col v-if="selectedPaymentMethod && selectedPaymentMethod.forceAutoRenewal" class="v-col">
                 <p class="mb-0">
-                  Automatische Abo-Erneuerung. Du erhältst von uns jährlich eine Erinnerungsmail und kannst jederzeit kündigen.
+                  Automatische Abo-Erneuerung. Du erhältst von uns jährlich eine Erinnerungsmail und kannst jederzeit
+                  kündigen.
                 </p>
               </v-col>
             </v-row>
           </v-col>
 
           <!-- challenge (only if not logged in) -->
-          <v-col
-            v-if="!user"
-            class="col-12 pt-8"
-          >
+          <v-col v-if="!user" class="col-12 pt-8">
             <v-row>
               <v-col class="col-12 pb-0">
                 <slot name="spamTitle" />
               </v-col>
             </v-row>
-            <challenge-view
-              ref="challengeView"
-              :challenge.sync="challenge"
-              :challenge-answer.sync="challengeAnswer"
-              @enter="checkout()"
-            />
+
+            <turnstile-view ref="turnstileView" @challengeAnswer="updateChallengeAnswer" />
           </v-col>
 
           <!-- submit button -->
           <v-col class="col-12 text-center pb-6">
-            <v-row
-              class="justify-center align-center"
-              :class="{
-                'pt-8 justify-sm-center': user && $vuetify.breakpoint.smAndUp
-              }"
-            >
-              <v-col
-                v-if="user"
-                class="col-auto order-1 order-sm-0"
-              >
-                <back-to-btn
-                  outlined
-                  rounded
-                  x-large
-                >
+            <v-row class="justify-center align-center" :class="{
+              'pt-8 justify-sm-center': user && $vuetify.breakpoint.smAndUp
+            }">
+              <v-col v-if="user" class="col-auto order-1 order-sm-0">
+                <back-to-btn outlined rounded x-large>
                   Zurück zum Profil
                 </back-to-btn>
               </v-col>
 
-              <v-col
-                v-if="!redirectLink"
-                class="col-auto order-0 order-sm-1"
-              >
-                <v-btn
-                  :loading="loadingCheckout"
-                  elevation="0"
-                  outlined
-                  rounded
-                  x-large
-                  @click="checkout()"
-                >
+              <v-col v-if="!redirectLink" class="col-auto order-0 order-sm-1">
+                <v-btn :loading="loadingCheckout" :disabled="!challengeAnswer" elevation="0" outlined rounded x-large
+                  @click="checkout()">
                   <span v-if="memberPlan.amountPerMonthMin === 0"><b>Gratis</b> Probe-Abo lösen</span>
                   <span v-else>
                     <b>CHF {{ yearlyAmount }}</b> <span v-if="user">&nbsp;Bestätigen &</span> &nbsp;Bezahlen
@@ -210,42 +133,25 @@
       </v-form>
 
       <!-- off-session payment with stripe -->
-      <v-row
-        v-else
-        class="justify-center"
-      >
+      <v-row v-else class="justify-center">
         <v-col class="col-12 headline">
           Kreditkartendaten eingeben
         </v-col>
         <v-col class="col-12 col-md-6">
-          <stripe-payment
-            :intent-secret.sync="intentSecret"
-            :success-url="SUCCESS_URL"
-          />
+          <stripe-payment :intent-secret.sync="intentSecret" :success-url="SUCCESS_URL" />
         </v-col>
       </v-row>
     </v-col>
 
     <!-- open invoices -->
-    <open-invoice-dialog
-      v-model="invoicesDialog"
-      :invoices="invoices"
-      @checkout="checkout(false, true)"
-    />
+    <open-invoice-dialog v-model="invoicesDialog" :invoices="invoices" @checkout="checkout(false, true)" />
 
     <!-- active subscriptions -->
-    <active-subscription-dialog
-      v-model="subscriptionsDialog"
-      :active-subscription="activeSubscription"
-      @checkout="checkout(false, false)"
-    />
+    <active-subscription-dialog v-model="subscriptionsDialog" :active-subscription="activeSubscription"
+      @checkout="checkout(false, false)" />
 
     <!-- show popup in case of redirect link -->
-    <redirect-dialog
-      v-model="redirectModal"
-      :redirect-link="redirectLink"
-      :logged-in="!!user"
-    />
+    <redirect-dialog v-model="redirectModal" :redirect-link="redirectLink" :logged-in="!!user" />
   </v-row>
 </template>
 
@@ -268,17 +174,17 @@ import Invoices from '~/sdk/wep/models/invoice/Invoices'
 import BackToBtn from '~/sdk/wep/components/helpers/BackToBtn.vue'
 import { RegistrationFormField } from '~/sdk/wep/interfacesAndTypes/Custom'
 import RegistrationForm from '~/sdk/wep/components/payment/RegistrationForm.vue'
-import ChallengeView from '~/sdk/wep/components/authentication/ChallengeView.vue'
 import Challenge from '~/sdk/wep/models/challenge/Challenge'
 import ChallengeAnswer from '~/sdk/wep/models/challenge/ChallengeAnswer'
 import ActiveSubscriptionDialog from '~/sdk/wep/components/payment/ActiveSubscriptionDialog.vue'
 import RedirectDialog from '~/sdk/wep/components/payment/RedirectDialog.vue'
 import OpenInvoiceDialog from '~/sdk/wep/components/payment/OpenInvoiceDialog.vue'
 import Subscription from '~/sdk/wep/models/subscription/Subscription'
+import TurnstileView from '~/sdk/wep/components/authentication/TurnstileView.vue'
 
 export default Vue.extend({
   name: 'PaymentForm',
-  components: { OpenInvoiceDialog, RedirectDialog, ActiveSubscriptionDialog, ChallengeView, RegistrationForm, BackToBtn, PaymentMethodIcons, PaymentSlider, StripePayment },
+  components: { TurnstileView, OpenInvoiceDialog, RedirectDialog, ActiveSubscriptionDialog, RegistrationForm, BackToBtn, PaymentMethodIcons, PaymentSlider, StripePayment },
   props: {
     memberPlan: {
       type: Object as PropType<MemberPlan>,
@@ -306,7 +212,7 @@ export default Vue.extend({
       default: false
     }
   },
-  data () {
+  data() {
     return {
       SUCCESS_URL: undefined as undefined | string,
       FAILURE_URL: undefined as undefined | string,
@@ -320,36 +226,36 @@ export default Vue.extend({
       invoicesDialog: false as boolean,
       subscriptionsDialog: false as boolean,
       challenge: undefined as undefined | Challenge,
-      challengeAnswer: new ChallengeAnswer({}) as ChallengeAnswer
+      challengeAnswer: undefined as undefined | ChallengeAnswer
     }
   },
   fetchOnServer: false,
-  async fetch () {
+  async fetch() {
     // refresh subscriptions and invoices
     await this.$store.dispatch('auth/setMeAndFetchAdditionalUserData', { vue: this })
   },
   computed: {
     // shortcut
-    availablePaymentMethods (): AvailablePaymentMethod[] {
+    availablePaymentMethods(): AvailablePaymentMethod[] {
       return this.memberPlan?.getAvailablePaymentMethods().availablePaymentMethods
     },
-    selectedPaymentMethod (): AvailablePaymentMethod | undefined {
+    selectedPaymentMethod(): AvailablePaymentMethod | undefined {
       if (!this.selectedPaymentProvider) { return undefined }
       return this.memberPlan?.getAvailablePaymentMethods().getAvailablePaymentMethodBySlug(this.selectedPaymentProvider)
     },
-    paymentMethod (): PaymentMethod | undefined {
+    paymentMethod(): PaymentMethod | undefined {
       return this.selectedPaymentMethod?.getPaymentMethods()?.getFirstPaymentMethod()
     },
-    user (): User {
+    user(): User {
       return this.$store.getters['auth/me']
     },
-    yearlyAmount (): string {
+    yearlyAmount(): string {
       if (!this.memberRegistration?.monthlyAmount) { return '0' }
       return NumberHelper.roundChf(this.memberRegistration.monthlyAmount * 12 / 100)
     },
 
     // check for settings to be complete and hint the user
-    settingsCorrect (): string | true {
+    settingsCorrect(): string | true {
       if (!this.memberPlan) { return 'Falsche WePublish-Einstellung: Member-Plan fehlt.' }
       if (!this.selectedPaymentMethod) { return 'Falsche WePublish-Einstellung: "Available-Payment-Method" fehlt.' }
       if (!this.paymentMethod) { return 'Falsche WePublish-Einstellung: "Payment-Method" fehlt.' }
@@ -357,28 +263,28 @@ export default Vue.extend({
       if (!this.FAILURE_URL) { return 'Falsche Konfiguration: Env-Variable PAYMENT_FAILURE_URL fehlt.' }
       return true
     },
-    mailQuery (): string | null | (string | null)[] {
+    mailQuery(): string | null | (string | null)[] {
       return this.$route.query.mail
     },
-    firstNameQuery (): string | null | (string | null)[] {
+    firstNameQuery(): string | null | (string | null)[] {
       return this.$route.query.firstName
     },
-    lastNameQuery (): string | null | (string | null)[] {
+    lastNameQuery(): string | null | (string | null)[] {
       return this.$route.query.lastName
     },
-    invoices (): undefined | Invoices {
+    invoices(): undefined | Invoices {
       return this.user?.invoices
     },
-    unpaidInvoices (): undefined | boolean {
+    unpaidInvoices(): undefined | boolean {
       return !!this.invoices?.getUnpaidInvoices().length
     },
-    subscriptions (): undefined | Subscriptions {
+    subscriptions(): undefined | Subscriptions {
       return this.user?.subscriptions
     },
-    trialSubscription (): undefined | Subscription {
+    trialSubscription(): undefined | Subscription {
       return this.subscriptions?.getTrialSubscription()
     },
-    activeSubscription (): Subscription | undefined {
+    activeSubscription(): Subscription | undefined {
       if (!this.subscriptions) {
         return undefined
       }
@@ -386,7 +292,7 @@ export default Vue.extend({
     }
   },
   watch: {
-    memberPlan () {
+    memberPlan() {
       if (!this.memberPlan) { return }
       this.memberRegistration.monthlyAmount = this.memberPlan.amountPerMonthMin
     },
@@ -399,15 +305,15 @@ export default Vue.extend({
       immediate: true
     }
   },
-  mounted () {
+  mounted() {
     this.init()
   },
   methods: {
-    init () {
+    init() {
       // loading redirect url
       this.SUCCESS_URL = this.$config.PAYMENT_SUCCESS_URL
       this.FAILURE_URL = this.$config.PAYMENT_FAILURE_URL
-      
+
       // pre-select auto-renew
       this.memberRegistration.autoRenew = true
       if (!this.memberPlan) { return }
@@ -427,11 +333,11 @@ export default Vue.extend({
         this.memberRegistration.deactivateSubscriptionId = this.trialSubscription.id
       }
     },
-    selectPaymentProvider (paymentMethod: PaymentMethod): void {
+    selectPaymentProvider(paymentMethod: PaymentMethod): void {
       this.selectedPaymentProvider = paymentMethod.slug
     },
     // init checkout process
-    async checkout (checkInvoices: boolean = true, checkSubscriptions: boolean = true): Promise<boolean> {
+    async checkout(checkInvoices: boolean = true, checkSubscriptions: boolean = true): Promise<boolean> {
       // check form
       if (!this.validateForms()) { return false }
       // indicating user to wait
@@ -461,7 +367,7 @@ export default Vue.extend({
         // something went wrong
         if (!response || !response?.session?.token) {
           // re-load the challenge
-          (this.$refs.challengeView as unknown as any)?.$fetch()
+          (this.$refs.turnstileView as unknown as any)?.reset()
           this.loadingCheckout = false
           return false
         }
@@ -479,7 +385,7 @@ export default Vue.extend({
      * Redirect user after intent secret received
      * @param redirectLink
      */
-    async redirectForPayment (redirectLink: string | undefined): Promise<boolean> {
+    async redirectForPayment(redirectLink: string | undefined): Promise<boolean> {
       if (!redirectLink) {
         // unknown error which should not occur
         this.$nuxt.$emit('alert', {
@@ -516,7 +422,7 @@ export default Vue.extend({
         return true
       }
     },
-    validateForms () {
+    validateForms() {
       const paymentSlider = this.$refs.paymentSliderRef as VForm | undefined
       const form = this.$refs.registrationFormRef as VForm
       if (!form.validate()) { return false }
@@ -525,7 +431,7 @@ export default Vue.extend({
       return true
     },
     // do some security checks before checkout
-    async checksBeforeCheckout (checkInvoices: boolean = true, checkSubscriptions: boolean = true) {
+    async checksBeforeCheckout(checkInvoices: boolean = true, checkSubscriptions: boolean = true) {
       if (this.user) {
         if (checkInvoices && (await this.hasOpenInvoices())) {
           return false
@@ -568,7 +474,7 @@ export default Vue.extend({
       }
       return true
     },
-    hasOpenInvoices () {
+    hasOpenInvoices() {
       // open dialog
       if (this.unpaidInvoices) {
         this.invoicesDialog = true
@@ -577,7 +483,7 @@ export default Vue.extend({
       // no unpaid invoices nor active subscriptions
       return false
     },
-    hasActiveSubscriptions () {
+    hasActiveSubscriptions() {
       // open dialog
       if (!!this.activeSubscription) {
         this.subscriptionsDialog = true
@@ -586,7 +492,7 @@ export default Vue.extend({
       return false
     },
     // helper method for checkout
-    setCheckoutVariables (): void {
+    setCheckoutVariables(): void {
       if (!this.paymentMethod?.id) {
         this.$nuxt.$emit('alert', {
           title: `Wir haben es mit einem technischen Fehler zu tun. Die PaymentMethodId existiert nicht. Bitte wende dich an ${this.$config.TECHNICAL_ISSUER_MAIL}`,
@@ -596,6 +502,13 @@ export default Vue.extend({
       }
       if (!this.SUCCESS_URL || !this.FAILURE_URL) {
         throw new Error('SUCCESS_URL or FAILURE_URL not defined!')
+      }
+      if (!this.challengeAnswer) {
+        this.$nuxt.$emit('alert', {
+          title: `Der Spam-Schutz ist nicht erfüllt.`,
+          type: 'error'
+        })
+        return
       }
       this.memberRegistration.paymentMethodId = this.paymentMethod.id
       this.memberRegistration.memberPlanId = this.memberPlan.id
@@ -615,11 +528,14 @@ export default Vue.extend({
       }
     },
     // method to be used by parent components
-    resetPayment () {
+    resetPayment() {
       this.intentSecret = undefined
     },
-    roundChf (value: number): string {
+    roundChf(value: number): string {
       return NumberHelper.roundChf(value)
+    },
+    updateChallengeAnswer(challengeAnswer: ChallengeAnswer): void {
+      this.challengeAnswer = challengeAnswer
     }
   }
 })
@@ -631,6 +547,7 @@ export default Vue.extend({
   bottom: 0px;
   right: 0px;
 }
+
 .position-relative {
   position: relative;
 }
