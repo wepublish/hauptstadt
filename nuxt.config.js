@@ -21,8 +21,7 @@ export default {
           gtag('config', 'G-44TZTJNQ6H');`,
         type: "text/javascript",
         charset: "utf-8"
-      },
-      
+      }
     ],
     __dangerouslyDisableSanitizersByTagID: {
       'gtag-init': ['innerHTML']
@@ -111,7 +110,8 @@ export default {
     // deprecated invoice only slug
     PAYREXX_INVOICE_ONLY_SLUG: 'payrexx-invoice-only',
     // HAS internal
-    MEDIUM_SLUG: 'HAS'
+    MEDIUM_SLUG: 'HAS',
+    CF_TURNSTILE_SITE_KEY: process.env.CF_TURNSTILE_SITE_KEY
   },
   privateRuntimeConfig: {
     WEP_API_URL_CLIENT: process.env.WEP_API_URL_CLIENT
