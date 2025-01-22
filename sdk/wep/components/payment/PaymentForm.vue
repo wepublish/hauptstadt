@@ -49,7 +49,7 @@
                 <v-alert color="primary" class="white--text text-center pt-4">
                   <span class="fal fa-exclamation-triangle mr-2" />
                   Icons der Payment-Provider wurden nicht konfiguriert. Bitte wende dich an {{
-  $config.TECHNICAL_ISSUER_MAIL }}
+                    $config.TECHNICAL_ISSUER_MAIL }}
                 </v-alert>
               </v-col>
 
@@ -110,7 +110,12 @@
               </v-col>
 
               <v-col v-if="!redirectLink" class="col-auto order-0 order-sm-1">
+<<<<<<< HEAD
                 <v-btn :loading="loadingCheckout" elevation="0" outlined rounded x-large @click="checkout()">
+=======
+                <v-btn :loading="loadingCheckout" :disabled="!challengeAnswer" elevation="0" outlined rounded x-large
+                  @click="checkout()">
+>>>>>>> main
                   <span v-if="memberPlan.amountPerMonthMin === 0"><b>Gratis</b> Probe-Abo lösen</span>
                   <span v-else>
                     <b>CHF {{ yearlyAmount }}</b> <span v-if="user">&nbsp;Bestätigen &</span> &nbsp;Bezahlen
@@ -501,6 +506,13 @@ export default Vue.extend({
       }
       if (!this.SUCCESS_URL || !this.FAILURE_URL) {
         throw new Error('SUCCESS_URL or FAILURE_URL not defined!')
+      }
+      if (!this.challengeAnswer) {
+        this.$nuxt.$emit('alert', {
+          title: `Der Spam-Schutz ist nicht erfüllt.`,
+          type: 'error'
+        })
+        return
       }
       this.memberRegistration.paymentMethodId = this.paymentMethod.id
       this.memberRegistration.memberPlanId = this.memberPlan.id
