@@ -1,65 +1,43 @@
 <template>
-  <v-footer
-    dark
-    class="pt-12 pb-6 pb-lg-8 pb-xl-12 pt-xl-16 d-print-none"
-  >
+  <v-footer dark class="pt-12 pb-6 pb-lg-8 pb-xl-12 pt-xl-16 d-print-none">
     <v-row class="no-gutters justify-center">
       <boxed-content>
         <v-row class="no-gutters w-100 px-sm-3 pl-lg-18 pr-lg-18 pl-xl-25 pr-xl-25">
           <!-- rubrics -->
           <v-col class="col-12 col-md-6">
-            <rubric-entries
-              :rubrics="rubrics"
-              css-class="title-24 title-md-32 title-lg-40"
-            />
+            <rubric-entries :rubrics="rubrics" css-class="title-24 title-md-32 title-lg-40" />
           </v-col>
 
           <!-- pages -->
           <v-col class="col-12 col-md-3 pt-12 pt-md-0">
-            <menu-page-entries
-              class="ml-md-n1"
-              :pages="pages"
-              css-class="font-size-16 font-size-md-21 font-size-lg-23"
-            />
+            <menu-page-entries class="ml-md-n1" :pages="pages"
+              css-class="font-size-16 font-size-md-21 font-size-lg-23" />
           </v-col>
 
           <!-- social media -->
           <v-col class="col-12 offset-md-6 col-md-6 pt-12 pt-md-0">
-            <v-row
-              v-if="socialMedias"
-              class="no-gutters fill-height align-center justify-md-end ml-md-n1"
-            >
-              <v-col
-                v-for="(socialMedia, socialMediaIndex) in socialMedias.links.links"
-                :key="socialMediaIndex"
-                class="col-auto"
-              >
-                <a :href="socialMedia.url" target="_blank" class="white--text">
-                  <span
-                    class="fab fa-facebook pr-6 pr-xl-12 title-24 title-md-32 title-lg-40"
-                    :class="`fa-${socialMedia.label}`"
-                  />
+            <v-row v-if="socialMedias" class="no-gutters fill-height align-center justify-md-end ml-md-n1">
+              <v-col v-for="(socialMedia, socialMediaIndex) in socialMedias.links.links" :key="socialMediaIndex"
+                class="col-auto">
+                <!-- bluesky as image since outdated fontawesome library-->
+                <a :href="socialMedia.url" target="_blank" class="white--text pr-6 pr-xl-12">
+                  <img v-if="socialMedia.label === 'bluesky'" class="bluesky-icon mt-1"
+                    src="~/assets/images/bluesky.svg" />
+
+                  <!-- other icons -->
+                  <span v-else class="fab fa-facebook title-24 title-md-32 title-lg-40"
+                    :class="`fa-${socialMedia.label}`" />
                 </a>
               </v-col>
 
               <v-spacer />
 
               <v-col class="col-auto text-right">
-                <img
-                  v-if="$vuetify.breakpoint.smAndDown"
-                  width="55px"
-                  src="~/assets/images/logo-icon-white.svg"
-                >
+                <img v-if="$vuetify.breakpoint.smAndDown" width="55px" src="~/assets/images/logo-icon-white.svg">
 
-                <div
-                  v-if="$vuetify.breakpoint.mdAndUp"
-                  class="pr-6 pb-1 pb-lg-3 pb-xl-7 pr-xl-8"
-                  style="position: absolute; bottom: 0px; right: 0px;"
-                >
-                  <img
-                    :width="`${logoIconSize}px`"
-                    src="~/assets/images/logo-icon-white.svg"
-                  >
+                <div v-if="$vuetify.breakpoint.mdAndUp" class="pr-6 pb-1 pb-lg-3 pb-xl-7 pr-xl-8"
+                  style="position: absolute; bottom: 0px; right: 0px;">
+                  <img :width="`${logoIconSize}px`" src="~/assets/images/logo-icon-white.svg">
                 </div>
               </v-col>
             </v-row>
@@ -82,25 +60,25 @@ export default Vue.extend({
   name: 'HFooter',
   components: { BoxedContent, MenuPageEntries, RubricEntries },
   computed: {
-    MENU_NAVIGATION_KEYS (): string[] {
+    MENU_NAVIGATION_KEYS(): string[] {
       return this.$store.getters['navigation/MENU_NAVIGATION_KEYS']
     },
-    menuNavigations (): Navigations | null {
+    menuNavigations(): Navigations | null {
       return this.$store.getters['navigation/menuNavigations']
     },
-    rubrics (): Navigation | undefined {
+    rubrics(): Navigation | undefined {
       if (!this.menuNavigations) { return undefined }
       return this.menuNavigations.getNavigationByKey(this.MENU_NAVIGATION_KEYS[0])
     },
-    pages (): Navigation | undefined {
+    pages(): Navigation | undefined {
       if (!this.menuNavigations) { return undefined }
       return this.menuNavigations.getNavigationByKey(this.MENU_NAVIGATION_KEYS[1])
     },
-    socialMedias (): Navigation | undefined {
+    socialMedias(): Navigation | undefined {
       if (!this.menuNavigations) { return undefined }
       return this.menuNavigations.getNavigationByKey(this.MENU_NAVIGATION_KEYS[2])
     },
-    logoIconSize (): number {
+    logoIconSize(): number {
       const breakpoint = this.$vuetify.breakpoint
       if (breakpoint.xlOnly) {
         return 80
@@ -116,3 +94,27 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style lang="scss">
+@import '~vuetify/src/styles/settings/variables';
+
+.bluesky-icon {
+  height: 24px;
+  width: 24px;
+  filter: invert(1);
+}
+
+@media #{map-get($display-breakpoints, 'md-and-up')} {
+  .bluesky-icon {
+    height: 32px;
+    width: 32px;
+  }
+}
+
+@media #{map-get($display-breakpoints, 'lg-and-up')} {
+  .bluesky-icon {
+    height: 40px;
+    width: 40px;
+  }
+}
+</style>
