@@ -20,13 +20,12 @@
               <v-col v-for="(socialMedia, socialMediaIndex) in socialMedias.links.links" :key="socialMediaIndex"
                 class="col-auto">
                 <!-- bluesky as image since outdated fontawesome library-->
-                <a :href="socialMedia.url" target="_blank" class="white--text pr-6 pr-xl-12">
+                <a :href="socialMedia.url" target="_blank" class="white--text pr-5 pr-md-6 pr-xl-12">
                   <img v-if="socialMedia.label === 'bluesky'" class="bluesky-icon mt-1"
                     src="~/assets/images/bluesky.svg" />
 
                   <!-- other icons -->
-                  <span v-else class="fab fa-facebook title-24 title-md-32 title-lg-40"
-                    :class="`fa-${socialMedia.label}`" />
+                  <span v-else class="fab title-24 title-md-32 title-lg-40" :class="`fa-${socialMedia.label}`" />
                 </a>
               </v-col>
 
