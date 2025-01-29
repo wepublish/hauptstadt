@@ -328,6 +328,9 @@ export default Vue.extend({
         this.memberRegistration.name = this.lastNameQuery
       }
       // set trial subscription to cancel
+      this.setTrialSubscription()
+    },
+    setTrialSubscription () {
       if (this.trialSubscription && !this.trialSubscription.isDeactivated()) {
         this.memberRegistration.deactivateSubscriptionId = this.trialSubscription.id
       }
@@ -518,6 +521,8 @@ export default Vue.extend({
       if (this.selectedPaymentMethod?.forceAutoRenewal) {
         this.memberRegistration.autoRenew = true
       }
+      // trial subscription
+      this.setTrialSubscription()
     },
     // method to be used by parent components
     resetPayment() {
