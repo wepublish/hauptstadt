@@ -1,11 +1,12 @@
 <template>
   <client-only>
-    <wep-publication
-      v-if="article"
-      :publication="article"
-      class="font-size-17 font-size-sm-18"
-      tiempos
-    />
+    <div>
+      <wep-publication v-if="article" :publication="article" class="font-size-17 font-size-sm-18" tiempos />
+      <article-tracking-pixels
+        v-if="article?.trackingPixels"
+        :tracking-pixels="article.trackingPixels"
+      />
+    </div>
   </client-only>
 </template>
 
@@ -15,10 +16,11 @@ import { MetaInfo } from 'vue-meta'
 import Article from '~/sdk/wep/models/wepPublication/article/Article'
 import ArticleService from '~/sdk/wep/services/ArticleService'
 import WepPublication from '~/components/wepPublication/WepPublication.vue'
+import ArticleTrackingPixels from '~/sdk/wep/components/trackingPixel/ArticleTrackingPixels.vue'
 
 export default Vue.extend({
   name: 'ArticleSlug',
-  components: { WepPublication },
+  components: { WepPublication, ArticleTrackingPixels },
   transition: 'default',
   props: {
     token: {

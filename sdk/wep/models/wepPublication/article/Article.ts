@@ -25,12 +25,14 @@ import PollBlock from '~/sdk/wep/models/block/PollBlock'
 import HTMLBlock from '~/sdk/wep/models/block/HTMLBlock'
 import Tag from '~/sdk/wep/models/tags/Tag'
 import Tags from '~/sdk/wep/models/tags/Tags'
+import TrackingPixel from '../../trackingPixel/TrackingPixel'
 
 export default class Article extends WepPublication {
   public preTitle?: string
   public lead: string
   public authors?: Authors
   public comments?: Comments
+  public trackingPixels: TrackingPixel[]
 
   constructor({
     id,
@@ -49,7 +51,8 @@ export default class Article extends WepPublication {
     socialMediaDescription,
     socialMediaImage,
     blocks,
-    comments
+    comments,
+    trackingPixels
   }: {
     id: string
     updatedAt?: Moment
@@ -67,7 +70,8 @@ export default class Article extends WepPublication {
     socialMediaDescription: string
     socialMediaImage?: WepImage
     blocks?: Blocks
-    comments?: Comments
+    comments?: Comments,
+    trackingPixels: TrackingPixel[]
   }) {
     super({
       id,
@@ -88,6 +92,7 @@ export default class Article extends WepPublication {
     this.lead = lead
     this.authors = authors ? new Authors().parse(authors as unknown as Author[]) : undefined
     this.comments = comments ? new Comments().parse(comments as unknown as Comment[]) : undefined
+    this.trackingPixels = trackingPixels
   }
 
   /**
@@ -125,6 +130,9 @@ export default class Article extends WepPublication {
       }
       socialMediaImage {
         ...image
+      }
+      trackingPixels {
+        ...trackingPixel
       }
       blocks {
         ... on TeaserGridBlock {
@@ -193,6 +201,7 @@ export default class Article extends WepPublication {
     ${PollBlock.pollBlockFragment}
     ${HTMLBlock.htmlBlockFragment}
     ${Tag.tagFragment}
+    ${TrackingPixel.trackingPixelFragment}
   `
 
   /**
