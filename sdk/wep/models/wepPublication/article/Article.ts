@@ -131,9 +131,6 @@ export default class Article extends WepPublication {
       socialMediaImage {
         ...image
       }
-      trackingPixels {
-        ...trackingPixel
-      }
       blocks {
         ... on TeaserGridBlock {
           ...teaserGridBlock
@@ -201,7 +198,6 @@ export default class Article extends WepPublication {
     ${PollBlock.pollBlockFragment}
     ${HTMLBlock.htmlBlockFragment}
     ${Tag.tagFragment}
-    ${TrackingPixel.trackingPixelFragment}
   `
 
   /**

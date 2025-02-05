@@ -51,6 +51,7 @@ import SiteOverlay from '~/components/helpers/SiteOverlay.vue'
 import BoxedContent from '~/components/layout/BoxedContent.vue'
 import MinimizedPaywallSquare from '~/components/paywall/MinimizedPaywallSquare.vue'
 import WepAlert from '~/sdk/wep/components/helpers/WepAlert.vue'
+import { LoginBypass } from '~/sdk/wep/utils'
 
 export default Vue.extend({
   name: 'DefaultLayout',
@@ -124,7 +125,9 @@ export default Vue.extend({
       await this.$store.dispatch('paywall/initPaywalls', { $config: this.$config })
       
       // redirect to landing page, if not logged-in
-      if (!this.$store.getters['auth/loggedIn'] && this.$route.name === 'index') {
+      const loginBypass = new LoginBypass(this.$cookies)
+      const activeBypass = loginBypass.check()
+      if (!this.$store.getters['auth/loggedIn'] && this.$route.name === 'index' && !activeBypass) {
         await this.$router.push('/lesen')
       }
     },
