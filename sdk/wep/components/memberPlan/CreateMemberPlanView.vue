@@ -99,7 +99,7 @@ export default defineComponent({
         }),
         new IconsOfPaymentProvider({
           paymentProviderSlug: 'payrexx',
-          iconNames: ['twint']
+          iconNames: ['twint', 'mastercard', 'visa']
         }),
         new IconsOfPaymentProvider({
           paymentProviderSlug: 'payrexx-invoice-only',
