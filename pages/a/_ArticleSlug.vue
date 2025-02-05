@@ -1,7 +1,11 @@
 <template>
   <client-only>
-    <wep-publication v-if="article" :publication="article" class="font-size-17 font-size-sm-18" tiempos />
-    <!-- <article-tracking-pixels v-if="article?.trackingPixels" :tracking-pixels="article.trackingPixels" /> -->
+    <v-row>
+      <v-col>
+        <wep-publication v-if="article" :publication="article" class="font-size-17 font-size-sm-18" tiempos />
+        <article-tracking-pixels v-if="article?.trackingPixels" :tracking-pixels="article.trackingPixels" />
+      </v-col>
+    </v-row>
   </client-only>
 </template>
 
