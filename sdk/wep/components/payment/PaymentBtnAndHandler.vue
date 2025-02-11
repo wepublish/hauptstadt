@@ -45,7 +45,8 @@
     <v-dialog v-model="extendDialog" max-width="600px">
       <v-card>
         <v-card-title>
-          Abo um ein {{ subscription.getPaymentPeriodicityReadable(true) }} verlängern?
+          Abo um ein {{ subscription.getPaymentPeriodicityReadable(true) }}
+          verlängern?
         </v-card-title>
         <v-card-text>
           Wir freuen uns, dass du dein Abo frühzeitig um ein {{ subscription.getPaymentPeriodicityReadable(true) }}

@@ -101,7 +101,7 @@ export default class Subscription {
 
   public getPaymentPeriodicityReadable(asNoun: boolean = false): string {
     if (asNoun) {
-      switch (this.paymentPeriodicity) {
+      switch (this.paymentPeriodicity.toUpperCase()) {
         case 'YEARLY':
           return 'Jahr'
         case 'BIANNUAL':
@@ -114,7 +114,7 @@ export default class Subscription {
           return ''
       }
     }
-    switch (this.paymentPeriodicity) {
+    switch (this.paymentPeriodicity.toUpperCase()) {
       case 'YEARLY':
         return 'jährlich'
       case 'BIANNUAL':
