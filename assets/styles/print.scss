@@ -9,6 +9,8 @@
   // Do not repeat header on every page
   .fixed-header {
     position: relative !important;
+    top: 0;
+      left: 0;
 
     // Set fixed header, logo and claim sizes
     .header-height {
