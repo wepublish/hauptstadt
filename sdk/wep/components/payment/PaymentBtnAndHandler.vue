@@ -1,14 +1,8 @@
 <template>
   <div>
     <!-- just add another btn with another mode, to extend this component -->
-    <v-btn
-      :outlined="btnDisabled"
-      :color="btnDisabled ? 'black' : 'primary'"
-      :disabled="btnDisabled"
-      :loading="preparingPayment || loading"
-      elevation="0"
-      @click="initPay()"
-    >
+    <v-btn :outlined="btnDisabled" :color="btnDisabled ? 'black' : 'primary'" :disabled="btnDisabled"
+      :loading="preparingPayment || loading" elevation="0" @click="initPay()">
       <span v-if="loading">
         <span class="mdi mdi-spin mdi-loading" />
         Prüfe Status
@@ -48,10 +42,7 @@
     </v-btn>
 
     <!-- extend subscription dialog -->
-    <v-dialog
-      v-model="extendDialog"
-      max-width="600px"
-    >
+    <v-dialog v-model="extendDialog" max-width="600px">
       <v-card>
         <v-card-title>
           Abo um ein {{ subscription.getPaymentPeriodicityReadable(true) }} verlängern?
@@ -60,77 +51,57 @@
           Wir freuen uns, dass du dein Abo frühzeitig um ein {{ subscription.getPaymentPeriodicityReadable(true) }}
           verlängern willst.
         </v-card-text>
-        <v-card-actions
-          class="justify-space-around"
-        >
-          <v-btn
-            outlined
-            @click="extendDialog = false"
-          >
+        <v-card-actions class="justify-space-around">
+          <v-btn outlined @click="extendDialog = false">
             Abbrechen
           </v-btn>
-          <v-btn
-            color="primary"
-            @click="userWantToExtendSubscription()"
-          >
+          <v-btn color="primary" @click="userWantToExtendSubscription()">
             Jetzt verlängern
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
+
     <!-- payrexx migration dialog -->
-    <v-dialog
-      v-model="payrexxMigrationDialog"
-      @click:outside="pay()"
-      max-width="550px"
-    >
+    <v-dialog v-model="payrexxMigrationDialog" @click:outside="pay()" max-width="550px">
       <v-card>
-        <v-btn
-          icon
-          large
-          style="top: 0; right: 0; position: absolute;"
-          @click="pay()"
-        >
-          <span class="fal fa-times fa-2x"/>
+        <v-btn icon large style="top: 0; right: 0; position: absolute;" @click="pay()">
+          <span class="fal fa-times fa-2x" />
         </v-btn>
         <v-card-title>
           Künftig noch einfacher: Automatische Bezahlung
         </v-card-title>
         <v-card-text>
           <p>
-            Wir haben den Twint-Zahlungsprozess für dich vereinfacht. Sofern du uns dein Einverständnis gibst, wird dein Abo in Zukunft automatisch verlängert. Selbstverständlich werden wir dich vor jeder Abbuchung transparent und rechtzeitig per Mail daran erinnern. Du kannst das Abo auch jederzeit kündigen.
+            Wir haben den Twint-Zahlungsprozess für dich vereinfacht. Sofern du uns dein Einverständnis gibst, wird dein
+            Abo in Zukunft automatisch verlängert. Selbstverständlich werden wir dich vor jeder Abbuchung transparent
+            und rechtzeitig per Mail daran erinnern. Du kannst das Abo auch jederzeit kündigen.
           </p>
           <p>
-            Wenn du damit nicht einverstanden bist, senden wir dir künftig eine QR-Rechnung per E-Mail, die du hernach begleichen kannst.
+            Wenn du damit nicht einverstanden bist, senden wir dir künftig eine QR-Rechnung per E-Mail, die du hernach
+            begleichen kannst.
           </p>
         </v-card-text>
-        <v-card-actions
-          class="justify-space-around"
-        >
-          <v-btn
-            outlined
-            color="grey"
-            @click="openSwitchDialog()"
-          >
-            Nein, auf Rechnung wechseln
-          </v-btn>
-          <v-btn
-            color="primary"
-            @click="pay()"
-          >
-            <span class="fal fa-check mr-1"/>
-            Einverstanden
-          </v-btn>
+        <v-card-actions>
+          <v-row class="justify-space-around text-center align-center mb-1">
+            <v-col class="v-col-auto order-1 order-sm-0">
+              <v-btn small outlined color="grey" @click="openSwitchDialog()">
+                Nein, auf Rechnung wechseln
+              </v-btn>
+            </v-col>
+            <v-col class="v-col-auto order-0 order-sm-1">
+              <v-btn large color="primary" @click="pay()">
+                <span class="fal fa-check mr-1" />
+                Einverstanden
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
+
     <!-- really want to change to invoice -->
-    <v-dialog
-      v-model="switchToInvoiceDialog"
-      max-width="550px"
-    >
+    <v-dialog v-model="switchToInvoiceDialog" max-width="550px">
       <v-card>
         <v-card-title>
           Bist du sicher?
@@ -139,16 +110,10 @@
           Dein aktuelles Abo wird gekündet und ein neues wird auf Rechnung erstellt.
         </v-card-text>
         <v-card-actions class="justify-space-around">
-          <v-btn
-            outlined
-            @click="switchSubscription()"
-          >
+          <v-btn outlined @click="switchSubscription()">
             Ja, Abo wechseln
           </v-btn>
-          <v-btn
-            color="primary"
-            @click="pay()"
-          >
+          <v-btn color="primary" @click="pay()">
             Doch lieber online bezahlen
           </v-btn>
         </v-card-actions>
@@ -156,11 +121,7 @@
     </v-dialog>
 
     <!-- stripe payment dialog -->
-    <v-dialog
-      v-model="paymentDialog"
-      transition="dialog-bottom-transition"
-      max-width="600px"
-    >
+    <v-dialog v-model="paymentDialog" transition="dialog-bottom-transition" max-width="600px">
       <v-card v-if="intentSecret">
         <v-card-title>
           <v-row class="no-gutters justify-space-between">
@@ -168,19 +129,14 @@
               Bitte gib deine Kreditkarten-Daten ein
             </v-col>
             <v-col class="col-auto">
-              <v-btn
-                icon
-                @click="paymentDialog = false"
-              >
+              <v-btn icon @click="paymentDialog = false">
                 <span class="mdi mdi-window-close headline" />
               </v-btn>
             </v-col>
           </v-row>
         </v-card-title>
         <v-card-text>
-          <stripe-payment
-            :intent-secret="intentSecret"
-          />
+          <stripe-payment :intent-secret="intentSecret" />
         </v-card-text>
       </v-card>
       <v-card v-else>
