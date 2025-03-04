@@ -5,7 +5,7 @@ export function stripHtml(input: string) {
 export class LoginBypass {
   private COOKIE_NAME = 'cafe-key'
   private VALID_KEYS = {
-    'DUMMY_CAFE': 'aed1dfa6dd5020ab7af56aebd2e5db68',
+    'GENERELL': 'generell',
   }
 
   constructor(private $cookies: any) {}
