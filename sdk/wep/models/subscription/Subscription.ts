@@ -84,6 +84,11 @@ export default class Subscription {
     return !!startDate?.isSameOrAfter(today)
   }
 
+  public isAutoPayrexxSubscription (): boolean {
+    const PAYREXX_SUBSCRIPTION_SLUG = 'payrexx-subscription'
+    return this.paymentMethod?.slug === PAYREXX_SUBSCRIPTION_SLUG
+  }
+
   public isDeactivated() {
     return !!this.deactivation
   }
