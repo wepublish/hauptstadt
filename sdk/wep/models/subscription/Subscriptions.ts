@@ -32,8 +32,12 @@ export default class Subscriptions {
     return this.subscriptions.find(subscription => subscription.id === id)
   }
 
+  public getAutoPayrexxSubscriptions (): Subscription[] | undefined {
+    return this.subscriptions.filter(subscription => subscription.isAutoPayrexxSubscription())
+  }
+
   public getActiveAndNonTrialSubscription (): Subscription | undefined {
-    return this.subscriptions.find(subscription => !subscription.deactivation && !subscription.isTrialSubscription())
+    return this.subscriptions.find(subscription => !subscription.deactivation && !subscription.isTrialSubscription() && !subscription.isAutoPayrexxSubscription())
   }
 
   public getTrialSubscription (): Subscription | undefined {

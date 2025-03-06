@@ -275,7 +275,12 @@ export default Vue.extend({
       return this.user?.invoices
     },
     unpaidInvoices(): undefined | boolean {
-      return !!this.invoices?.getUnpaidInvoices().length
+      const unpaidInvoices = this.invoices?.getUnpaidInvoices()
+      
+      // we can leave payrexx subscriptions invoices open. Therefore, the unpaid invoices should not be of auto payrexx subscription.
+      const payrexxSubscriptions = this.subscriptions?.getAutoPayrexxSubscriptions()
+      const unpaidInvoicesWithoutPayrexxSubscription = unpaidInvoices?.filter(unpaidInvoice => !payrexxSubscriptions?.find(payrexxSubscription => payrexxSubscription.id === unpaidInvoice.subscriptionID))
+      return !!unpaidInvoicesWithoutPayrexxSubscription?.length
     },
     subscriptions(): undefined | Subscriptions {
       return this.user?.subscriptions
