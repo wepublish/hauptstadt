@@ -70,7 +70,7 @@
         </v-col>
         <!-- unpaid invoice of type Payrexx subscription. -->
         <v-col
-          v-if="autoPayrexxPayment && !invoice.isPaid()"
+          v-if="isPayrexxSubscription && !invoice.isPaid()"
           class="col-12"
         >
           <v-alert outlined type="error">
@@ -99,8 +99,15 @@
         </v-col>
       </v-row>
     </v-card-text>
-    <!-- checks Payrexx Subscription workaround described here: https://wepublish.atlassian.net/browse/BAJ-473 -->
-    <v-card-actions v-if="!invoice.isPaid() && !invoice.canceledAt && !isInvoiceOnly && !willBeAutoCharged">
+    <!-- payrexx subscription workaround -->
+    <v-card-actions v-if="isPayrexxSubscription">
+      <v-row>
+        <v-col class="col-12">
+          <payrexx-subscription-invoice-migrator :subscription="subscription" />
+        </v-col>
+      </v-row>
+    </v-card-actions>
+    <v-card-actions v-else-if="!invoice.isPaid() && !invoice.canceledAt && !isInvoiceOnly && !willBeAutoCharged && !isPayrexxSubscription">
       <v-row class="justify-center">
         <v-col class="col-auto">
           <payment-btn-and-handler
@@ -109,7 +116,6 @@
             :invoice="invoice"
             :loading="checkInvoiceStates"
             :disabled="!paymentPossible"
-            @setAutoPayrexxPayment="value => autoPayrexxPayment = value"
           />
         </v-col>
       </v-row>
@@ -125,10 +131,11 @@ import NumberHelper from '~/sdk/wep/classes/NumberHelper'
 import Subscription from '~/sdk/wep/models/subscription/Subscription'
 import PaymentBtnAndHandler from '~/sdk/wep/components/payment/PaymentBtnAndHandler.vue'
 import {isInvoiceOnly} from '~/sdk/wep/classes/InvoiceOnlyHelper'
+import PayrexxSubscriptionInvoiceMigrator from '~/components/invoice/PayrexxSubscriptionInvoiceMigrator.vue'
 
 export default Vue.extend({
   name: 'InvoicePreview',
-  components: { PaymentBtnAndHandler },
+  components: {PayrexxSubscriptionInvoiceMigrator, PaymentBtnAndHandler },
   props: {
     invoice: {
       type: Object as PropType<Invoice>,
@@ -145,11 +152,13 @@ export default Vue.extend({
   },
   data () {
     return {
-      autoPayrexxPayment: false as boolean,
       NumberHelper
     }
   },
   computed: {
+    isPayrexxSubscription (): boolean {
+      return this.subscription?.paymentMethod?.getSlug() === this.$config.PAYREXX_SUBSCRIPTION_SLUG
+    },
     subscription (): undefined | Subscription {
       if (!this.subscriptions) {
         return undefined
@@ -161,10 +170,7 @@ export default Vue.extend({
       if (this.invoice.canceledAt) {
         return false
       }
-      if (this.checkInvoiceStates) {
-        return false
-      }
-      return !this.autoPayrexxPayment
+      return !this.checkInvoiceStates;
     },
     // checks for payrexx only invoice and bexio subscriptions
     isInvoiceOnly (): boolean {

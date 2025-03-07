@@ -79,11 +79,10 @@
           class="col-auto order-sm-1"
         >
           <payment-btn-and-handler
-            v-if="!subscription.deactivation && !isInvoiceOnly"
+            v-if="!subscription.deactivation && !isInvoiceOnly && !this.isPayrexxSubscription"
             :mode="openInvoice ? 'payOpenInvoice' : 'extendSubscription'"
             :subscription="subscription"
             :invoice="openInvoice"
-            @setAutoPayrexxPayment="value => isPayrexxSubscription = value"
           />
         </v-col>
 
@@ -168,7 +167,6 @@ export default Vue.extend({
     return {
       showDialog: false as boolean,
       cancelInProgress: false as boolean,
-      isPayrexxSubscription: false as boolean,
       NumberHelper
     }
   },
@@ -202,6 +200,9 @@ export default Vue.extend({
         payrexxInvoiceOnlySlug: this.$config.PAYREXX_INVOICE_ONLY_SLUG
       })
     },
+    isPayrexxSubscription (): boolean {
+      return this.subscription?.paymentMethod?.getSlug() === this.$config.PAYREXX_SUBSCRIPTION_SLUG
+    }
   },
   methods: {
     askToCancelSubscription () {
