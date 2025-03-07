@@ -16,7 +16,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      intentSecret: undefined as string | undefined
+      intentSecret: undefined as string | undefined,
+      errorDialog: false as boolean
     }
   },
   methods: {
@@ -61,7 +62,7 @@ export default Vue.extend({
         paymentMethodId: payrexxPaymentId,
         successURL: this.$config.PAYMENT_SUCCESS_URL,
         failureURL: this.$config.PAYMENT_FAILURE_URL,
-        // deactivateSubscriptionId: this.subscription.id
+        deactivateSubscriptionId: this.subscription.id
       } as MemberRegistration
       
       const memberService = new MemberService({vue: this})
@@ -75,9 +76,15 @@ export default Vue.extend({
       
       if (paymentHandling === 'open-stripe-payment-dialog' && !!paymentResponse) {
         this.intentSecret = paymentResponse.getRedirectUrl()
+      } else if (paymentHandling === 'payment-response-is-undefined') {
+        this.errorDialog = true
       } else {
         await this.reloadUserData()
       }
+    },
+    async closeErrorDialog (): Promise<void> {
+      this.errorDialog = false
+      await this.reloadUserData()
     },
     async reloadUserData (): Promise<void> {
       await this.$store.dispatch('auth/setMeAndFetchAdditionalUserData', { vue: this })
@@ -96,7 +103,8 @@ export default Vue.extend({
       </v-col>
     </v-row>
     
-    <v-dialog :value="!!intentSecret" @click:outside="reloadUserData()"  @close="reloadUserData()" max-width="600px">
+    <!-- in case of stripe payment -->
+    <v-dialog :value="!!intentSecret" max-width="600px" @click:outside="reloadUserData()"  @close="reloadUserData()">
       <v-card>
         <v-card-title>
           Kreditkartendaten eingeben
@@ -104,6 +112,25 @@ export default Vue.extend({
         <v-card-text>
           <stripe-payment :intent-secret.sync="intentSecret" />
         </v-card-text>
+      </v-card>
+    </v-dialog>
+    
+    <!-- in case deactivation of the payrexx subscription did not work -->
+    <v-dialog :value="errorDialog" max-width="600px" @click:outside="reloadUserData()"  @close="reloadUserData()">
+      <v-card>
+        <v-card-title>
+          Etwas ist schief gelaufen
+        </v-card-title>
+        <v-card-text>
+          Weil Du noch über ein altes Abo verfügt hast, haben wir Dir das bisherige Abo automatisch ersetzen.
+          Leider hat jedoch die automatische Deaktivierung des veralteten Abos gerade nicht funktioniert.
+          Melde Dich doch kurz bei uns unter {{$config.TECHNICAL_ISSUER_MAIL}}
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn color="primary" @click="closeErrorDialog()">
+            Schliessen
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
