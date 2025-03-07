@@ -73,20 +73,11 @@
           v-if="autoPayrexxPayment && !invoice.isPaid()"
           class="col-12"
         >
-          <v-alert outlined type="info" color="#00000099" dense prominent class="cursor-pointer" @click="$router.push('/abo')">
-            <div class="font-size-14">
-              Wir haben vor einiger Zeit das Membersystem umgestellt. Du verfügst noch über eine alte Membership,
-              die nicht mehr automatisch erneuert werden konnte – z. B. weil die Kreditkarte abgelaufen ist. Löse ganz
-              einfach hier ein neues Abo. Die unbezahlte Rechnung kannst du ignorieren. Herzlichen Dank.
-            </div>
+          <v-alert outlined type="error">
+            Wir haben vor einiger Zeit das Membersystem umgestellt. Du verfügst noch über eine alte Membership,
+            die nicht mehr automatisch erneuert werden konnte – z. B. weil die Kreditkarte abgelaufen ist. Löse ganz
+            einfach hier ein neues Abo. Die unbezahlte Rechnung kannst du ignorieren. Herzlichen Dank.
           </v-alert>
-          <v-row>
-            <v-col class="col-12 text-center">
-              <v-btn color="primary" to="/abo" class="white--text">
-                Jetzt neues Abo lösen
-              </v-btn>
-            </v-col>
-          </v-row>
         </v-col>
         <!-- invoice can be paid by payrexx invoice only -->
         <v-col
@@ -109,7 +100,7 @@
       </v-row>
     </v-card-text>
     <!-- checks Payrexx Subscription workaround described here: https://wepublish.atlassian.net/browse/BAJ-473 -->
-    <v-card-actions v-if="!invoice.isPaid() && !invoice.canceledAt && !isInvoiceOnly && !willBeAutoCharged && !autoPayrexxPayment">
+    <v-card-actions v-if="!invoice.isPaid() && !invoice.canceledAt && !isInvoiceOnly && !willBeAutoCharged">
       <v-row class="justify-center">
         <v-col class="col-auto">
           <payment-btn-and-handler
