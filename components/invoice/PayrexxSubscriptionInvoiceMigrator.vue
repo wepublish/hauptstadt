@@ -3,13 +3,20 @@ import Vue, {PropType} from 'vue'
 import MemberRegistration from '~/sdk/wep/models/member/MemberRegistration'
 import MemberService from '~/sdk/wep/services/MemberService'
 import Subscription from '~/sdk/wep/models/subscription/Subscription'
+import StripePayment from '~/sdk/wep/components/payment/StripePayment.vue'
 
 export default Vue.extend({
   name: 'PayrexxSubscriptionInvoiceMigrator',
+  components: {StripePayment},
   props: {
     subscription: {
       type: Object as PropType<Subscription | undefined>,
       required: true
+    }
+  },
+  data() {
+    return {
+      intentSecret: undefined as string | undefined
     }
   },
   methods: {
@@ -54,16 +61,26 @@ export default Vue.extend({
         paymentMethodId: payrexxPaymentId,
         successURL: this.$config.PAYMENT_SUCCESS_URL,
         failureURL: this.$config.PAYMENT_FAILURE_URL,
-        deactivateSubscriptionId: this.subscription.id
+        // deactivateSubscriptionId: this.subscription.id
       } as MemberRegistration
       
       const memberService = new MemberService({vue: this})
       const paymentResponse = await memberService.createSubscription({memberRegistration})
       
-      await this.$store.dispatch('auth/setMeAndFetchAdditionalUserData', { vue: this })
+      const paymentHandling = memberService.handlePaymentResponse({
+        response: paymentResponse,
+        successURL: this.$config.PAYMENT_SUCCESS_URL,
+        issuerMail: this.$config.TECHNICAL_ISSUER_MAIL
+      })
       
-      // trigger invoice to pay
-      this.$nuxt.$emit('pay-latest-invoice-of-member-plan-id', memberPlanId)
+      if (paymentHandling === 'open-stripe-payment-dialog' && !!paymentResponse) {
+        this.intentSecret = paymentResponse.getRedirectUrl()
+      } else {
+        await this.reloadUserData()
+      }
+    },
+    async reloadUserData (): Promise<void> {
+      await this.$store.dispatch('auth/setMeAndFetchAdditionalUserData', { vue: this })
     }
   }
 })
@@ -78,5 +95,16 @@ export default Vue.extend({
         </v-btn>
       </v-col>
     </v-row>
+    
+    <v-dialog :value="!!intentSecret" @click:outside="reloadUserData()"  @close="reloadUserData()" max-width="600px">
+      <v-card>
+        <v-card-title>
+          Kreditkartendaten eingeben
+        </v-card-title>
+        <v-card-text>
+          <stripe-payment :intent-secret.sync="intentSecret" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>

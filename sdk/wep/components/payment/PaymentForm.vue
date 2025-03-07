@@ -137,7 +137,7 @@
           Kreditkartendaten eingeben
         </v-col>
         <v-col class="col-12 col-md-6">
-          <stripe-payment :intent-secret.sync="intentSecret" :success-url="SUCCESS_URL" />
+          <stripe-payment :intent-secret.sync="intentSecret" />
         </v-col>
       </v-row>
     </v-col>
