@@ -68,26 +68,6 @@
         >
           Rechnung storniert am {{ invoice.canceledAt.format('DD.MM.YYYY') }}
         </v-col>
-        <!-- unpaid invoice of type Payrexx subscription. -->
-        <v-col
-          v-if="autoPayrexxPayment && !invoice.isPaid()"
-          class="col-12"
-        >
-          <v-alert outlined type="info" color="#00000099" dense prominent class="cursor-pointer" @click="$router.push('/abo')">
-            <div class="font-size-14">
-              Wir haben vor einiger Zeit das Membersystem umgestellt. Du verfügst noch über eine alte Membership,
-              die nicht mehr automatisch erneuert werden konnte – z. B. weil die Kreditkarte abgelaufen ist. Löse ganz
-              einfach hier ein neues Abo. Die unbezahlte Rechnung kannst du ignorieren. Herzlichen Dank.
-            </div>
-          </v-alert>
-          <v-row>
-            <v-col class="col-12 text-center">
-              <v-btn color="primary" to="/abo" class="white--text">
-                Jetzt neues Abo lösen
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
         <!-- invoice can be paid by payrexx invoice only -->
         <v-col
           v-if="isInvoiceOnly"
@@ -108,8 +88,15 @@
         </v-col>
       </v-row>
     </v-card-text>
-    <!-- checks Payrexx Subscription workaround described here: https://wepublish.atlassian.net/browse/BAJ-473 -->
-    <v-card-actions v-if="!invoice.isPaid() && !invoice.canceledAt && !isInvoiceOnly && !willBeAutoCharged && !autoPayrexxPayment">
+    <!-- payrexx subscription workaround -->
+    <v-card-actions v-if="isPayrexxSubscription && !invoice.isPaid()">
+      <v-row>
+        <v-col class="col-12">
+          <payrexx-subscription-invoice-migrator :subscription="subscription" />
+        </v-col>
+      </v-row>
+    </v-card-actions>
+    <v-card-actions v-else-if="!invoice.isPaid() && !invoice.canceledAt && !isInvoiceOnly && !willBeAutoCharged && !isPayrexxSubscription">
       <v-row class="justify-center">
         <v-col class="col-auto">
           <payment-btn-and-handler
@@ -118,7 +105,6 @@
             :invoice="invoice"
             :loading="checkInvoiceStates"
             :disabled="!paymentPossible"
-            @setAutoPayrexxPayment="value => autoPayrexxPayment = value"
           />
         </v-col>
       </v-row>
@@ -134,10 +120,11 @@ import NumberHelper from '~/sdk/wep/classes/NumberHelper'
 import Subscription from '~/sdk/wep/models/subscription/Subscription'
 import PaymentBtnAndHandler from '~/sdk/wep/components/payment/PaymentBtnAndHandler.vue'
 import {isInvoiceOnly} from '~/sdk/wep/classes/InvoiceOnlyHelper'
+import PayrexxSubscriptionInvoiceMigrator from '~/components/invoice/PayrexxSubscriptionInvoiceMigrator.vue'
 
 export default Vue.extend({
   name: 'InvoicePreview',
-  components: { PaymentBtnAndHandler },
+  components: {PayrexxSubscriptionInvoiceMigrator, PaymentBtnAndHandler },
   props: {
     invoice: {
       type: Object as PropType<Invoice>,
@@ -154,11 +141,13 @@ export default Vue.extend({
   },
   data () {
     return {
-      autoPayrexxPayment: false as boolean,
       NumberHelper
     }
   },
   computed: {
+    isPayrexxSubscription (): boolean {
+      return this.subscription?.paymentMethod?.getSlug() === this.$config.PAYREXX_SUBSCRIPTION_SLUG
+    },
     subscription (): undefined | Subscription {
       if (!this.subscriptions) {
         return undefined
@@ -170,10 +159,7 @@ export default Vue.extend({
       if (this.invoice.canceledAt) {
         return false
       }
-      if (this.checkInvoiceStates) {
-        return false
-      }
-      return !this.autoPayrexxPayment
+      return !this.checkInvoiceStates;
     },
     // checks for payrexx only invoice and bexio subscriptions
     isInvoiceOnly (): boolean {

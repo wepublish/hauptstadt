@@ -8,6 +8,8 @@ import User from '~/sdk/wep/models/user/User'
 import PaymentResponse from '~/sdk/wep/models/response/PaymentResponse'
 import RegisterMemberResponse from '~/sdk/wep/models/response/RegisterMemberResponse'
 
+export type HandlePaymentResponseAnswer = 'no-charge-payment-adapter' | 'payment-response-is-undefined' | 'paid-with-existing-credit-card' | 'missing-redirect-url' | 'redirect-to-payrexx' | 'open-stripe-payment-dialog'
+
 export default class MemberService extends Service {
   constructor({vue}: {vue: Vue}) {
     super({vue})
@@ -266,6 +268,38 @@ export default class MemberService extends Service {
         type: 'error'
       })
       return false
+    }
+  }
+
+  public handlePaymentResponse ({response, successURL, issuerMail}: {response: PaymentResponse | false, successURL: string, issuerMail: string}): HandlePaymentResponseAnswer {
+    if (!response) {
+      return 'payment-response-is-undefined'
+    }
+
+    // abo has been paid with existing credit card
+    if (response?.state?.toLowerCase() === 'paid') {
+      window.location.assign(successURL)
+      return 'paid-with-existing-credit-card'
+    }
+
+    const redirectUrl = response.getRedirectUrl()
+    // no redirect url available
+    if (!redirectUrl) {
+      this.alert({
+        title: `Leider konnte der Bezahl-Link nicht abgerufen werden. Bitte wende dich an ${issuerMail}`,
+        type: 'error'
+      })
+      return 'missing-redirect-url'
+    }
+    // payrexx
+    if (redirectUrl.startsWith('https://')) {
+      window.location.assign(redirectUrl)
+      return 'redirect-to-payrexx'
+    } else if (redirectUrl.startsWith('no_charge')) { // trial subscriptions: non-charge-payment-adapter
+      window.location.assign(successURL)
+      return 'no-charge-payment-adapter'
+    } else { // stripe
+      return 'open-stripe-payment-dialog'
     }
   }
 }

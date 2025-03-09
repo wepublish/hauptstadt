@@ -8,19 +8,6 @@
         Prüfe Status
       </span>
 
-      <!-- Payrexx Subscription workaround -->
-      <span v-else-if="autoPayrexxPayment">
-        <!-- extend subscription -->
-        <span v-if="mode === 'extendSubscription'">
-          Auto-Verlängerung
-        </span>
-
-        <!-- open invoice -->
-        <span v-if="mode === 'payOpenInvoice'">
-          Zahlung automatisch via Payrexx
-        </span>
-      </span>
-
       <!-- payment possible -->
       <span v-else>
         <!-- extend subscription -->
@@ -210,17 +197,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    // checks workaround Payrexx subscription as described here: https://wepublish.atlassian.net/browse/BAJ-473
-    autoPayrexxPayment (): boolean {
-      if (!this.subscription) {
-        return true
-      }
-      const paymentMethodSlug = this.subscription.getPaymentMethod()?.getSlug()
-      if (paymentMethodSlug === this.$config.PAYREXX_SUBSCRIPTION_SLUG) {
-        return true
-      }
-      return false
-    },
     autoChargingPayment (): boolean {
       const slugs: string[] = this.$config.AUTO_CHARGE_PAYMENT_METHOD_SLUGS
       return !!this.subscription?.willBeAutoCharged(slugs)
@@ -238,18 +214,10 @@ export default Vue.extend({
       return !!this.invoices.getOpenInvoicesBySubscriptionId(this.subscription.id).length
     },
     btnDisabled (): boolean {
-      return this.disabled || this.autoPayrexxPayment || this.autoChargingPayment
+      return this.disabled || this.autoChargingPayment
     },
     isTrialSubscription (): boolean {
       return this.subscription.isTrialSubscription()
-    }
-  },
-  watch: {
-    autoPayrexxPayment: {
-      immediate: true,
-      handler () {
-        this.$emit('setAutoPayrexxPayment', this.autoPayrexxPayment)
-      }
     }
   },
   methods: {
@@ -346,15 +314,6 @@ export default Vue.extend({
         return false
       }
 
-      // do not try to pay Payrexx Subscriptions
-      if (this.autoPayrexxPayment) {
-        this.$nuxt.$emit('alert', {
-          title: `Zahlung nicht möglich. Sie erfolgt automatisch via Payrexx. Bitte wende Dich an ${this.$config.TECHNICAL_ISSUER_MAIL}`,
-          type: 'error'
-        })
-        return false
-      }
-
       // check invoice is available, if mode is payOpenInvoice
       if (this.mode === 'payOpenInvoice' && !this.invoice) {
         this.$nuxt.$emit('alert', {
@@ -396,48 +355,25 @@ export default Vue.extend({
         failureURL
       }
     },
-    async handlingAfterPayment (response: false | PaymentResponse): Promise<boolean | void> {
-      if (!response) {
-        // refresh user data, in case of error
-        await this.refreshUserData()
-        return false
-      }
-
-      // abo has been paid with existing credit card
-      if (response.state === 'Paid') {
-        this.$nuxt.$emit('alert', {
-          title: 'Abo wurde erfolgreich verlängert und bezahlt.',
-          type: 'success'
+    async handlingAfterPayment (response: false | PaymentResponse): Promise<undefined> {
+      const paymentHandling = new MemberService({vue: this})
+        .handlePaymentResponse({
+          response: response,
+          successURL: this.$config.PAYMENT_SUCCESS_URL as string,
+          issuerMail: this.$config.TECHNICAL_ISSUER_MAIL as string
         })
-        await this.refreshUserData()
-        return true
-      }
-
-      const redirectUrl = response.getRedirectUrl()
-
-      // no redirect url available
-      if (!redirectUrl) {
-        this.$nuxt.$emit('alert', {
-          title: `Leider fehlt die Weiterleitungs-URL. Bitte wende dich an ${this.$config.TECHNICAL_ISSUER_MAIL}`,
-          type: 'error'
-        })
-        await this.refreshUserData()
-        return false
-      }
-      // payrexx
-      if (redirectUrl.startsWith('https://')) {
-        this.preparingPayment = false
-        window.location.assign(redirectUrl)
-      } else if (redirectUrl.startsWith('no_charge')) { // trial subscriptions: non-charge-payment-adapter
-        const successURL = this.$config.PAYMENT_SUCCESS_URL
-        window.location.assign(successURL)
-      } else { // stripe
-        // open payment dialog
-        this.intentSecret = redirectUrl
+      
+      if (paymentHandling === 'open-stripe-payment-dialog' && !!response) {
+        // open stripe payment dialog
+        this.intentSecret = response.getRedirectUrl()
         this.$nextTick(() => {
           this.paymentDialog = true
         })
+        return
       }
+      
+      await this.refreshUserData()
+      return
     },
 
     // deprecated from 01.05.2024 on

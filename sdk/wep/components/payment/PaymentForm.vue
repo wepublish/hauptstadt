@@ -137,7 +137,7 @@
           Kreditkartendaten eingeben
         </v-col>
         <v-col class="col-12 col-md-6">
-          <stripe-payment :intent-secret.sync="intentSecret" :success-url="SUCCESS_URL" />
+          <stripe-payment :intent-secret.sync="intentSecret" />
         </v-col>
       </v-row>
     </v-col>
@@ -180,6 +180,7 @@ import RedirectDialog from '~/sdk/wep/components/payment/RedirectDialog.vue'
 import OpenInvoiceDialog from '~/sdk/wep/components/payment/OpenInvoiceDialog.vue'
 import Subscription from '~/sdk/wep/models/subscription/Subscription'
 import TurnstileView from '~/sdk/wep/components/authentication/TurnstileView.vue'
+import PaymentResponse from '~/sdk/wep/models/response/PaymentResponse'
 
 export default Vue.extend({
   name: 'PaymentForm',
@@ -275,12 +276,7 @@ export default Vue.extend({
       return this.user?.invoices
     },
     unpaidInvoices(): undefined | boolean {
-      const unpaidInvoices = this.invoices?.getUnpaidInvoices()
-      
-      // we can leave payrexx subscriptions invoices open. Therefore, the unpaid invoices should not be of auto payrexx subscription.
-      const payrexxSubscriptions = this.subscriptions?.getAutoPayrexxSubscriptions()
-      const unpaidInvoicesWithoutPayrexxSubscription = unpaidInvoices?.filter(unpaidInvoice => !payrexxSubscriptions?.find(payrexxSubscription => payrexxSubscription.id === unpaidInvoice.subscriptionID))
-      return !!unpaidInvoicesWithoutPayrexxSubscription?.length
+      return !!this.invoices?.getUnpaidInvoices().length
     },
     subscriptions(): undefined | Subscriptions {
       return this.user?.subscriptions
@@ -344,9 +340,9 @@ export default Vue.extend({
       this.selectedPaymentProvider = paymentMethod.slug
     },
     // init checkout process
-    async checkout(checkInvoices: boolean = true, checkSubscriptions: boolean = true): Promise<boolean> {
+    async checkout(checkInvoices: boolean = true, checkSubscriptions: boolean = true): Promise<undefined> {
       // check form
-      if (!this.validateForms()) { return false }
+      if (!this.validateForms()) { return }
       // indicating user to wait
       this.loadingCheckout = true
       // set required variables for endpoint
@@ -354,7 +350,7 @@ export default Vue.extend({
       const checksPassed = await this.checksBeforeCheckout(checkInvoices, checkSubscriptions)
       if (!checksPassed) {
         this.loadingCheckout = false
-        return false
+        return
       }
       let response
       // existing logged in user
@@ -363,9 +359,9 @@ export default Vue.extend({
           memberRegistration: this.memberRegistration
         })
         if (!response) {
-          return false
+          return
         }
-        return await this.redirectForPayment(response.intentSecret)
+        await this.handlingAfterPayment(response)
       } else {
         // register new user
         response = await new MemberService({ vue: this }).registerMemberAndReceivePayment({
@@ -376,7 +372,7 @@ export default Vue.extend({
           // re-load the challenge
           (this.$refs.turnstileView as unknown as any)?.reset()
           this.loadingCheckout = false
-          return false
+          return
         }
         // login user
         await this.$store.dispatch('auth/loginWithSession', {
@@ -385,48 +381,22 @@ export default Vue.extend({
           $apolloHelpers: this.$apolloHelpers,
           session: response.session.token
         })
-        return await this.redirectForPayment(response.payment?.intentSecret)
+        await this.handlingAfterPayment(response.payment)
       }
     },
-    /**
-     * Redirect user after intent secret received
-     * @param redirectLink
-     */
-    async redirectForPayment(redirectLink: string | undefined): Promise<boolean> {
-      if (!redirectLink) {
-        // unknown error which should not occur
-        this.$nuxt.$emit('alert', {
-          title: `Leider konnte der Bezahl-Link nicht abgerufen werden. Bitte wende dich an ${this.$config.TECHNICAL_ISSUER_MAIL}`,
-          type: 'error'
+    
+    async handlingAfterPayment(response: false | PaymentResponse): Promise<void> {
+      const paymentHandling = new MemberService({vue: this})
+        .handlePaymentResponse({
+          response,
+          successURL: this.$config.PAYMENT_SUCCESS_URL as string,
+          issuerMail: this.$config.TECHNICAL_ISSUER_MAIL
         })
-        return false
-      }
-
       this.loadingCheckout = false
-      if (redirectLink.startsWith('https://') || redirectLink.startsWith('http://localhost')) {
-        // if same hostname, do not open a new tab
-        const redirectUrl = new URL(redirectLink)
-        if (redirectUrl.hostname === window.location.hostname) {
-          await this.$router.push(redirectUrl.pathname)
-          return true
-        }
-
-        this.redirectLink = redirectLink
-        this.redirectModal = true
-
-        // fixes safari problem: https://stackoverflow.com/questions/20696041/window-openurl-blank-not-working-on-imac-safari
-        setTimeout(() => {
-          window.open(redirectLink, '_blank')
-        }, 50)
-        return true
-      } else if (redirectLink.startsWith('no_charge')) { // trial subscriptions: non-charge-payment-adapter
-        const successURL = this.$config.PAYMENT_SUCCESS_URL
-        window.location.assign(successURL)
-        return true
-      } else {
+      
+      if (paymentHandling === 'open-stripe-payment-dialog' && !!response) {
         // it's an intent secret. Load inline stripe form by setting the intentSecret variable
-        this.intentSecret = redirectLink
-        return true
+        this.intentSecret = response.getRedirectUrl()
       }
     },
     validateForms() {
