@@ -55,7 +55,7 @@ export default Vue.extend({
       }
       
       const memberRegistration = {
-        autoRenew: this.subscription.autoRenew,
+        autoRenew: true,
         monthlyAmount: this.subscription.monthlyAmount,
         memberPlanId,
         paymentPeriodicity: this.subscription.paymentPeriodicity,
