@@ -8,7 +8,7 @@ import User from '~/sdk/wep/models/user/User'
 import PaymentResponse from '~/sdk/wep/models/response/PaymentResponse'
 import RegisterMemberResponse from '~/sdk/wep/models/response/RegisterMemberResponse'
 
-export type HandlePaymentResponseAnswer = 'payment-response-is-undefined' | 'paid-with-existing-credit-card' | 'missing-redirect-url' | 'redirect-to-payrexx' | 'open-stripe-payment-dialog'
+export type HandlePaymentResponseAnswer = 'no-charge-payment-adapter' | 'payment-response-is-undefined' | 'paid-with-existing-credit-card' | 'missing-redirect-url' | 'redirect-to-payrexx' | 'open-stripe-payment-dialog'
 
 export default class MemberService extends Service {
   constructor({vue}: {vue: Vue}) {
@@ -277,11 +277,8 @@ export default class MemberService extends Service {
     }
 
     // abo has been paid with existing credit card
-    if (response.state === 'Paid') {
-      this.alert({
-        title: 'Abo wurde erfolgreich verlängert und bezahlt.',
-        type: 'success'
-      })
+    if (response?.state?.toLowerCase() === 'paid') {
+      window.location.assign(successURL)
       return 'paid-with-existing-credit-card'
     }
 
@@ -300,6 +297,7 @@ export default class MemberService extends Service {
       return 'redirect-to-payrexx'
     } else if (redirectUrl.startsWith('no_charge')) { // trial subscriptions: non-charge-payment-adapter
       window.location.assign(successURL)
+      return 'no-charge-payment-adapter'
     } else { // stripe
       return 'open-stripe-payment-dialog'
     }

@@ -342,7 +342,7 @@ export default Vue.extend({
     // init checkout process
     async checkout(checkInvoices: boolean = true, checkSubscriptions: boolean = true): Promise<undefined> {
       // check form
-      if (!this.validateForms()) { return false }
+      if (!this.validateForms()) { return }
       // indicating user to wait
       this.loadingCheckout = true
       // set required variables for endpoint
@@ -372,7 +372,7 @@ export default Vue.extend({
           // re-load the challenge
           (this.$refs.turnstileView as unknown as any)?.reset()
           this.loadingCheckout = false
-          return false
+          return
         }
         // login user
         await this.$store.dispatch('auth/loginWithSession', {
@@ -385,7 +385,7 @@ export default Vue.extend({
       }
     },
     
-    async handlingAfterPayment(response: false | PaymentResponse): Promise<undefined> {
+    async handlingAfterPayment(response: false | PaymentResponse): Promise<void> {
       const paymentHandling = new MemberService({vue: this})
         .handlePaymentResponse({
           response,
