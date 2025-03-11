@@ -127,6 +127,13 @@ export default Vue.extend({
       // redirect to landing page, if not logged-in
       const loginBypass = new LoginBypass(this.$cookies)
       const activeBypass = loginBypass.check()
+
+      // minimize header paywalls if bypass is active
+      if (activeBypass) {
+        const paywalls = this.$store.getters['paywall/headerPaywalls']
+        this.$store.commit('paywall/minimize', paywalls)
+      }
+
       if (!this.$store.getters['auth/loggedIn'] && this.$route.name === 'index' && !activeBypass) {
         await this.$router.push('/lesen')
       }

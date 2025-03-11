@@ -5,12 +5,12 @@
   >
     <!-- full view -->
     <v-col
-      v-if="!paywalls.minimized"
+      v-if="!paywalls?.minimized"
       class="col-12"
     >
       <!-- closing button md-and-up -->
       <div
-        v-if="paywalls.isResizable()"
+        v-if="paywalls?.isResizable()"
         class="cursor-pointer hidden-sm-and-down pt-0 position-relative"
         @click="$store.commit('paywall/minimize', paywalls)"
       >
