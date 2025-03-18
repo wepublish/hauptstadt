@@ -122,9 +122,9 @@ export default Vue.extend({
           Etwas ist schief gelaufen
         </v-card-title>
         <v-card-text>
-          Weil Du noch über ein altes Abo verfügt hast, haben wir Dir das bisherige Abo automatisch ersetzen.
-          Leider hat jedoch die automatische Deaktivierung des veralteten Abos gerade nicht funktioniert.
-          Melde Dich doch kurz bei uns unter {{$config.TECHNICAL_ISSUER_MAIL}}
+          Weil Du noch über ein altes Abo verfügt hast, haben wir es automatisch ersetzt.
+          Leider hat jedoch die automatische Deaktivierung des alten Abos nicht funktioniert.
+          Bitte melde Dich kurz bei uns unter {{$config.TECHNICAL_ISSUER_MAIL}}
         </v-card-text>
         <v-card-actions class="justify-center">
           <v-btn color="primary" @click="closeErrorDialog()">
