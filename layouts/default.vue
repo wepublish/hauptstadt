@@ -67,7 +67,11 @@ export default Vue.extend({
       return this.$route.path === '/lesen'
     },
     isIosApp(): boolean {
-      return !!window?.navigator?.userAgent?.includes('Safari/604.1 WePublish')
+      const userAgent = window?.navigator?.userAgent?.toLowerCase()
+      if (!userAgent) {
+        return false
+      }
+      return !!userAgent.match(/iphone|ipod|ipad/) && !!userAgent.includes('wepublish')
     }
   },
   async mounted() {
