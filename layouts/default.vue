@@ -1,36 +1,17 @@
 <template>
   <v-app>
-    <site-overlay
-      v-if="overlay"
-      :redirect-url="redirectUrl"
-      :password="password"
-      @hide="hideOverlay()"
-    />
+    <site-overlay v-if="overlay" :redirect-url="redirectUrl" :password="password" @hide="hideOverlay()" />
     <!-- ml-md-n3 is to avoid scroll bar with is calculated to the view-port -->
-    <v-main
-      class="min-h-100-vh"
-    >
-      <v-container
-        fluid
-      >
+    <v-main class="min-h-100-vh">
+      <v-container fluid>
         <!-- menu content: ml-sm-n3 is a fix for shifted scroll bar width -->
-        <h-menu
-          class="z-index-4"
-        />
+        <h-menu class="z-index-4" />
         <!-- header ml-sm-n3 is a fix for shifted scroll bar width -->
-        <h-header
-          v-if="!hideHeader"
-          class="z-index-5"
-        />
-        <v-row
-          class="no-gutters justify-center"
-        >
+        <h-header v-if="!hideHeader" class="z-index-5" />
+        <v-row class="no-gutters justify-center">
           <boxed-content>
             <!-- content -->
-            <Nuxt
-              class="nuxt-content white"
-              :style="hideHeader ? 'margin-top: 0px;' : ''"
-            />
+            <Nuxt class="nuxt-content white" :style="hideHeader ? 'margin-top: 0px;' : ''" />
           </boxed-content>
         </v-row>
       </v-container>
@@ -69,7 +50,7 @@ export default Vue.extend({
       })
     }
   },
-  data () {
+  data() {
     return {
       overlay: false
     }
@@ -83,18 +64,21 @@ export default Vue.extend({
     }
   },
   computed: {
-    redirectUrl (): string | undefined {
+    redirectUrl(): string | undefined {
       return this.$nuxt.context.$config.REDIRECT_URL
     },
-    password (): string | undefined {
+    password(): string | undefined {
       return this.$nuxt.context.$config.OVERLAY_PASSWORD
     },
-    hideHeader (): boolean {
+    hideHeader(): boolean {
       // hide header on special landing page
       return this.$route.path === '/lesen'
+    },
+    isIosApp(): boolean {
+      return !!window?.navigator?.userAgent?.includes('Safari/604.1 WePublish')
     }
   },
-  async mounted () {
+  async mounted() {
     if (this.redirectUrl || this.password) {
       this.overlay = true
     }
@@ -109,12 +93,12 @@ export default Vue.extend({
     }
   },
   methods: {
-    async lazyLoadMenuNavigations () {
+    async lazyLoadMenuNavigations() {
       await this.$store.dispatch('navigation/lazyLoadMenuNavigations', {
         vue: this
       })
     },
-    async login () {
+    async login() {
       await this.$store.dispatch('auth/login', {
         vue: this,
         $apollo: this.$apollo,
@@ -123,7 +107,7 @@ export default Vue.extend({
       })
       // init the paywalls after login
       await this.$store.dispatch('paywall/initPaywalls', { $config: this.$config })
-      
+
       // redirect to landing page, if not logged-in
       const loginBypass = new LoginBypass(this.$cookies)
       const activeBypass = loginBypass.check()
@@ -134,11 +118,18 @@ export default Vue.extend({
         this.$store.commit('paywall/minimize', paywalls)
       }
 
-      if (!this.$store.getters['auth/loggedIn'] && this.$route.name === 'index' && !activeBypass) {
+      /**
+       * redirect to landing-page exept
+       * - user is logged-in
+       * - bypass is active
+       * - website is served with ios app
+       * - user is not on the startpage
+       */
+      if (!this.$store.getters['auth/loggedIn'] && this.$route.name === 'index' && !activeBypass && !this.isIosApp) {
         await this.$router.push('/lesen')
       }
     },
-    hideOverlay () {
+    hideOverlay() {
       this.overlay = false
     }
   }
