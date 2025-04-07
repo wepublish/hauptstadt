@@ -6,7 +6,11 @@ export class LoginBypass {
   private COOKIE_NAME = 'cafe-key'
   private VALID_KEYS = {
     'GENERELL': 'generell',
-    'parlamentsbibliothek': 'parlamentsbibliothek'
+    'parlamentsbibliothek': 'parlamentsbibliothek',
+    'effinger': 'hsga25effingervbmv',
+    'apfelgold': 'hsga25apfelgoldvbmv',
+    'obloc': 'hsga25oblocvbmv',
+    'adrianos': 'hsga25adrianosvbmv'
   }
 
   constructor(private $cookies: any) {}
