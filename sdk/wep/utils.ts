@@ -10,7 +10,9 @@ export class LoginBypass {
     'effinger': 'hsga25effingervbmv',
     'apfelgold': 'hsga25apfelgoldvbmv',
     'obloc': 'hsga25oblocvbmv',
-    'adrianos': 'hsga25adrianosvbmv'
+    'adrianos': 'hsga25adrianosvbmv',
+    'versa': 'hsga25versavbmv',
+    'muuberi': 'hsga25muuberivbmv'
   }
 
   constructor(private $cookies: any) {}
