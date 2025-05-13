@@ -248,7 +248,7 @@ export default Vue.extend({
       return false
     },
     isBoxed680 (block: Block): boolean {
-      if (block instanceof TeaserGridBlock || block instanceof PaywallBlock) {
+      if (block instanceof TeaserGridBlock || block instanceof PaywallBlock || block?.blockStyle === 'FullWidth') {
         return false
       }
       if (this.isBoxed840(block)) {
