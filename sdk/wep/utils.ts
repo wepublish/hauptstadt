@@ -5,14 +5,16 @@ export function stripHtml(input: string) {
 export class LoginBypass {
   private COOKIE_NAME = 'cafe-key'
   private VALID_KEYS = {
-    'GENERELL': 'generell',
-    'parlamentsbibliothek': 'parlamentsbibliothek',
-    'effinger': 'hsga25effingervbmv',
-    'apfelgold': 'hsga25apfelgoldvbmv',
-    'obloc': 'hsga25oblocvbmv',
-    'adrianos': 'hsga25adrianosvbmv',
-    'versa': 'hsga25versavbmv',
-    'muuberi': 'hsga25muuberivbmv'
+    GENERELL: 'generell',
+    parlamentsbibliothek: 'parlamentsbibliothek',
+    effinger: 'hsga25effingervbmv',
+    apfelgold: 'hsga25apfelgoldvbmv',
+    obloc: 'hsga25oblocvbmv',
+    adrianos: 'hsga25adrianosvbmv',
+    versa: 'hsga25versavbmv',
+    muuberi: 'hsga25muubeerivbmv',
+    zarbar: 'hsga25zarbarvbmv',
+    viktor: 'hsga25viktorvbmv',
   }
 
   constructor(private $cookies: any) {}
@@ -23,7 +25,7 @@ export class LoginBypass {
     }
     this.$cookies.set(this.COOKIE_NAME, key, {
       path: '/',
-      maxAge: 60 * 60 * 4
+      maxAge: 60 * 60 * 4,
     })
     return true
   }
