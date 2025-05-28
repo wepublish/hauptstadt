@@ -6,85 +6,129 @@ export default {
     titleTemplate: '%s - Hauptstadt',
     title: 'Hauptstadt',
     htmlAttrs: {
-      lang: 'de'
+      lang: 'de',
     },
     script: [
       {
-        hid: "gtag-script",
-        src: "https://www.googletagmanager.com/gtag/js?id=G-44TZTJNQ6H",
+        hid: 'gtag-script',
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-44TZTJNQ6H',
         async: true,
-      }, {
-        hid: "gtag-init",
+      },
+      {
+        hid: 'gtag-init',
         innerHTML: `window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', 'G-44TZTJNQ6H');`,
-        type: "text/javascript",
-        charset: "utf-8"
-      }
+        type: 'text/javascript',
+        charset: 'utf-8',
+      },
+      {
+        hid: 'gtm',
+        innerHTML: `
+            <!-- Google Tag Manager -->
+
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+
+            })(window,document,'script','dataLayer','GTM-KBR8Z6M8');</script>
+
+            <!-- End Google Tag Manager -->
+        `,
+        type: 'text/javascript',
+        charset: true,
+      },
     ],
     __dangerouslyDisableSanitizersByTagID: {
-      'gtag-init': ['innerHTML']
+      'gtag-init': ['innerHTML'],
+      gtm: ['innerHTML'],
     },
     meta: [
-      {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {name: 'format-detection', content: 'telephone=no'},
-      {hid: 'description', name: 'description', content: 'Neuer Berner Journalismus'},
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'format-detection', content: 'telephone=no' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Neuer Berner Journalismus',
+      },
       // open graph
-      {hid: 'og:title', property: 'og:title', content: 'Hauptstadt - Neuer Berner Journalismus'},
+      {
+        hid: 'og:title',
+        property: 'og:title',
+        content: 'Hauptstadt - Neuer Berner Journalismus',
+      },
       {
         hid: 'og:description',
         property: 'og:description',
         content:
           'Aus Bern, für Bern, unabhängig, werbefrei, professionell und gemeinnützig: ' +
-          'Die «Hauptstadt» ist die nachhaltige Alternative zum Konzernjournalismus. Jeder Franken, den wir einnehmen, fliesst in den Journalismus.'
+          'Die «Hauptstadt» ist die nachhaltige Alternative zum Konzernjournalismus. Jeder Franken, den wir einnehmen, fliesst in den Journalismus.',
       },
-      {hid: 'og:url', property: 'og:url', content: 'https://hauptstadt.be'},
-      {hid: 'og:image:type', property: 'og:image:type', content: 'image/png'},
+      { hid: 'og:url', property: 'og:url', content: 'https://hauptstadt.be' },
+      { hid: 'og:image:type', property: 'og:image:type', content: 'image/png' },
       {
         hid: 'og:image',
         property: 'og:image',
         content:
-          'https://hauptstadt-media01.wepublish.cloud/OGFd8Zf1d9ynMmD/rz_hauptstadt_icon_sw_positiv.png'
+          'https://hauptstadt-media01.wepublish.cloud/OGFd8Zf1d9ynMmD/rz_hauptstadt_icon_sw_positiv.png',
       },
       // twitter
-      {hid: 'twitter:card', name: 'twitter:card', content: 'summary'},
-      {hid: 'twitter:site', name: 'twitter:site', content: '@hauptstadt_be'},
+      { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+      { hid: 'twitter:site', name: 'twitter:site', content: '@hauptstadt_be' },
       {
         hid: 'twitter:title',
         name: 'twitter:title',
-        content: 'Hauptstadt - Neuer Berner Journalismus'
+        content: 'Hauptstadt - Neuer Berner Journalismus',
       },
       {
         hid: 'twitter:description',
         name: 'twitter:description',
         content:
           'Aus Bern, für Bern, unabhängig, werbefrei, professionell und gemeinnützig: ' +
-          'Die «Hauptstadt» ist die nachhaltige Alternative zum Konzernjournalismus. Jeder Franken, den wir einnehmen, fliesst in den Journalismus.'
+          'Die «Hauptstadt» ist die nachhaltige Alternative zum Konzernjournalismus. Jeder Franken, den wir einnehmen, fliesst in den Journalismus.',
       },
       {
         hid: 'twitter:image',
         property: 'twitter:image',
         content:
-          'https://hauptstadt-media01.wepublish.cloud/OGFd8Zf1d9ynMmD/rz_hauptstadt_icon_sw_positiv.png'
+          'https://hauptstadt-media01.wepublish.cloud/OGFd8Zf1d9ynMmD/rz_hauptstadt_icon_sw_positiv.png',
       },
       // favicon
-      {name: 'apple-mobile-web-app-title', content: 'Hauptstadt'},
-      {name: 'application-name', content: 'Hauptstadt'},
-      {name: 'msapplication-TileColor', content: '#abd8da'},
-      {name: 'msapplication-TileImage', content: '/mstile-144x144.png'},
-      {name: 'theme-color', content: '#ffffff'}
+      { name: 'apple-mobile-web-app-title', content: 'Hauptstadt' },
+      { name: 'application-name', content: 'Hauptstadt' },
+      { name: 'msapplication-TileColor', content: '#abd8da' },
+      { name: 'msapplication-TileImage', content: '/mstile-144x144.png' },
+      { name: 'theme-color', content: '#ffffff' },
     ],
     link: [
       // favicon
-      {rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png'},
-      {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png'},
-      {rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png'},
-      {rel: 'manifest', href: '/site.webmanifest'},
-      {rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#000000'},
-      {rel: 'stylesheet', href: '/fontawesome-all.min.css'}
-    ]
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/apple-touch-icon.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicon-16x16.png',
+      },
+      { rel: 'manifest', href: '/site.webmanifest' },
+      { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#000000' },
+      { rel: 'stylesheet', href: '/fontawesome-all.min.css' },
+    ],
   },
   publicRuntimeConfig: {
     ENVIRONMENT: process.env.ENVIRONMENT,
@@ -111,10 +155,10 @@ export default {
     PAYREXX_INVOICE_ONLY_SLUG: 'payrexx-invoice-only',
     // HAS internal
     MEDIUM_SLUG: 'HAS',
-    CF_TURNSTILE_SITE_KEY: process.env.CF_TURNSTILE_SITE_KEY
+    CF_TURNSTILE_SITE_KEY: process.env.CF_TURNSTILE_SITE_KEY,
   },
   privateRuntimeConfig: {
-    WEP_API_URL_CLIENT: process.env.WEP_API_URL_CLIENT
+    WEP_API_URL_CLIENT: process.env.WEP_API_URL_CLIENT,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -136,7 +180,7 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -145,7 +189,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/apollo',
     '@nuxtjs/sentry',
-    'cookie-universal-nuxt'
+    'cookie-universal-nuxt',
   ],
 
   sentry: {
@@ -153,16 +197,16 @@ export default {
     // Additional Module Options go here
     // https://sentry.nuxtjs.org/sentry/options
     config: {
-      environment: process.env.NODE_ENV
+      environment: process.env.NODE_ENV,
       // Add native Sentry config here
       // https://docs.sentry.io/platforms/javascript/guides/vue/configuration/options/
-    }
+    },
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    baseURL: '/',
   },
 
   router: {
@@ -170,16 +214,16 @@ export default {
       // make sure if user navigates back, the position of the page remains the same
       if (!savedPosition) {
         if (to.hash) {
-          return {selector: to.hash}
+          return { selector: to.hash }
         }
-        return {x: 0, y: 0}
+        return { x: 0, y: 0 }
       }
 
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const eventCb = () => {
-          let position = savedPosition || {x: 0, y: 0}
+          let position = savedPosition || { x: 0, y: 0 }
           if (to.hash && document.querySelector(to.hash)) {
-            position = {selector: to.hash}
+            position = { selector: to.hash }
           }
           window.removeEventListener('scrollToSavedPosition', eventCb)
           resolve(position)
@@ -190,7 +234,7 @@ export default {
     extendRoutes(routes) {
       // redirects public article url (coming from peers)
       routes.push(...extendRoutes)
-    }
+    },
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -199,7 +243,7 @@ export default {
     treeShake: true,
     customVariables: ['~/assets/styles/variables.scss'],
     theme: {
-      options: {customProperties: true},
+      options: { customProperties: true },
       themes: {
         light: {
           primary: '#abd8da',
@@ -209,29 +253,29 @@ export default {
           yellow: '#f4e7bd',
           grey: '#e1dfe5',
           beige: '#f3ded0',
-          anthrazit: '#1e1e1e'
-        }
-      }
+          anthrazit: '#1e1e1e',
+        },
+      },
     },
     breakpoint: {
       thresholds: {
         xs: 760,
         sm: 1000,
         md: 1480,
-        lg: 2116
+        lg: 2116,
       },
-      scrollBarWidth: 16
+      scrollBarWidth: 16,
     },
     icons: {
-      iconfont: 'fa'
-    }
+      iconfont: 'fa',
+    },
   },
   apollo: {
     clientConfigs: {
-      default: '~/plugins/apollo-config.ts'
-    }
+      default: '~/plugins/apollo-config.ts',
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {}
+  build: {},
 }
