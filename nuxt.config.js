@@ -41,7 +41,7 @@ export default {
             <!-- End Google Tag Manager -->
         `,
         type: 'text/javascript',
-        charset: true,
+        charset: 'utf-8',
       },
     ],
     __dangerouslyDisableSanitizersByTagID: {
