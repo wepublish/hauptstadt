@@ -28,7 +28,7 @@ export default {
         innerHTML: `
             <!-- Google Tag Manager -->
 
-            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 
@@ -36,7 +36,7 @@ export default {
 
             'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 
-            })(window,document,'script','dataLayer','GTM-KBR8Z6M8');</script>
+            })(window,document,'script','dataLayer','GTM-KBR8Z6M8');
 
             <!-- End Google Tag Manager -->
         `,
