@@ -15,6 +15,7 @@ export class LoginBypass {
     muuberi: 'hsga25muubeerivbmv',
     zarbar: 'hsga25zarbarvbmv',
     viktor: 'hsga25viktorvbmv',
+    muenstergasse: 'HSGAYYmuenstergassevbmv',
   }
 
   constructor(private $cookies: any) {}
