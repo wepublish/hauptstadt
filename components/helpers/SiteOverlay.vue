@@ -10,11 +10,8 @@
           </v-col>
           <v-col class="col-12 text-center pt-12 px-6">
             <p class="title-30 tiempos-semibold">
-              Auf dieser Seite testen wir die Hauptstadt bloss.
+              Die «Hauptstadt» macht ein technisches Update. Wir sind spätestens am Mittag wieder online.
             </p>
-          </v-col>
-          <v-col class="col-12 text-center pt-6 px-6">
-            <a :href="redirectUrl" class="caption-20">Hier geht's zur richtigen Hauptstadt.</a>
           </v-col>
         </v-row>
       </v-col>
